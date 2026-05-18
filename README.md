@@ -1,4 +1,4 @@
-# Georgia Tech Win Probability Model (CFBD)
+# Georgia Tech Football Win Probability Model (CFBD)
 
 Train a Georgia Tech win-probability model from CollegeFootballData (CFBD) API data (games, Elo, talent, returning production, recruiting) without using CFBD's built-in win expectancy.
 
@@ -17,6 +17,14 @@ Win probability models turn “how good are we?” into a calibrated, game-by-ga
 - Setting realistic expectations (and spotting true upsets vs “coin-flips”)
 - Quantifying disagreement vs public baselines (like ESPN FPI) to see where your model adds value
 - Creating repeatable backtests with proper scoring rules (Brier / log loss), not just W/L picks
+
+## Approach
+
+This project frames win probability as a supervised classification problem: historical outcomes are paired with pregame team-strength indicators (team form, opponent strength, roster/talent proxies, and location). A simple model is used for transparency, then probabilities are calibrated so “70%” predictions behave like 70% over time.
+
+## Pipeline (one-line)
+
+CFBD API → feature engineering → dataset → logistic regression → calibration → evaluation → predictions + reports
 
 ## Architecture (high level)
 
@@ -43,6 +51,15 @@ flowchart TD
 - Reproducible metrics saved to `models/metrics.json`
 - Caching of CFBD responses for faster reruns
 - Optional reporting + plots and comparisons vs ESPN FPI
+
+## Model features used
+
+The model uses pregame, team-level features including:
+
+- Home/away/neutral indicators
+- Season-to-date team form (win%, point differential, schedule strength; plus recency-weighted versions)
+- Elo differential (when available via CFBD)
+- Roster strength proxies: talent composite, returning production, recruiting strength/rank (when available via CFBD)
 
 ## Requirements
 
@@ -107,6 +124,8 @@ The repo includes example trained artifacts under `models/`. For that run:
 
 Full details: `models/metrics.json`.
 
+Interpretation: Brier/log loss reward well-calibrated probabilities, so improvements here are a stronger signal than raw pick accuracy alone.
+
 Note: the year split is currently fixed in code inside `winprob.py` (train=2014-2022, val=2023-2024, test=2025).
 
 ## Model vs ESPN FPI (win %)
@@ -149,6 +168,8 @@ Default output:
 - CFBD endpoints can change or be missing depending on access/plan; the pipeline drops features that are entirely missing.
 - Small sample sizes (single team, single season test) make metrics noisy; calibration can overfit when data is limited.
 - FPI inputs in this repo are a manual snapshot for 2025 and are not fetched automatically.
+- The model is pregame/team-level only (no in-game dynamics, injuries, weather, or play-by-play context).
+- Logistic regression is intentionally simple and may miss nonlinear interactions.
 
 ## Future improvements
 
