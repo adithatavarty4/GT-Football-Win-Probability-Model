@@ -10,6 +10,40 @@ Train a Georgia Tech win-probability model from CollegeFootballData (CFBD) API d
 - Predicts a single matchup or an entire season schedule
 - (Optional) Generates reports/plots and compares vs ESPN FPI
 
+## Why this matters
+
+Win probability models turn “how good are we?” into a calibrated, game-by-game number you can compare across seasons and opponents. That’s useful for:
+
+- Setting realistic expectations (and spotting true upsets vs “coin-flips”)
+- Quantifying disagreement vs public baselines (like ESPN FPI) to see where your model adds value
+- Creating repeatable backtests with proper scoring rules (Brier / log loss), not just W/L picks
+
+## Architecture (high level)
+
+```mermaid
+flowchart TD
+  A[CFBD API\n/games, /talent, /player/returning,\n/recruiting/teams, /ratings/elo] --> B[CFBD cache\n data_raw/cfbd_cache]
+  B --> C[Dataset builder\n winprob.py build-dataset]
+  C --> D[data_processed/model_dataset.csv]
+  D --> E[Trainer\n winprob.py train]
+  E --> F[Model artifacts\n models/*.joblib + metrics.json]
+  F --> G[Predictor\n winprob.py predict / predict-season]
+  G --> H[data_processed/predictions_<year>.csv]
+  H --> I[Reports\n analysis_report.py backtest]
+  I --> J[Plots + tables\n reports/<year>/]
+  H --> K[FPI compare\n analysis_report.py model-vs-fpi]
+  K --> L[Plot\n reports/model_fpi/]
+```
+
+## Features
+
+- End-to-end CLI: build dataset → train → predict
+- Recency weighting (half-life) so newer seasons matter more
+- Probability calibration (sigmoid vs isotonic) with validation-based selection
+- Reproducible metrics saved to `models/metrics.json`
+- Caching of CFBD responses for faster reruns
+- Optional reporting + plots and comparisons vs ESPN FPI
+
 ## Requirements
 
 - Python 3.10+
@@ -108,3 +142,18 @@ Default output:
 - CFBD responses are cached under `data_raw/cfbd_cache/` to speed up repeated runs.
 - CFBD requires an API key and may enforce rate limits; caching helps reduce repeated calls.
 - This is a personal/educational model and is not affiliated with CFBD or Georgia Tech.
+
+## Limitations
+
+- The train/val/test split is currently hard-coded (see note above), so it’s not a full rolling backtest yet.
+- CFBD endpoints can change or be missing depending on access/plan; the pipeline drops features that are entirely missing.
+- Small sample sizes (single team, single season test) make metrics noisy; calibration can overfit when data is limited.
+- FPI inputs in this repo are a manual snapshot for 2025 and are not fetched automatically.
+
+## Future improvements
+
+- Add a rolling / walk-forward evaluation mode across many seasons
+- Add hyperparameter tuning and richer models (GBMs) while keeping calibration
+- Support any team as a first-class target (not just GT) and add multi-team training
+- Improve opponent strength features and injury/availability features (if data sources are available)
+- Automate FPI ingestion (or support multiple external baselines) with clear provenance
