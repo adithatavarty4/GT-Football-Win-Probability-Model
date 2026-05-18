@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Local data / artifacts
+data_raw/
+data_processed/
+models/
+
+# OS/editor
+.DS_Store
+Thumbs.db

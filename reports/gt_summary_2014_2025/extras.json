@@ -1,0 +1,102 @@
+{
+  "close_games": {
+    "n": 55,
+    "win_rate": 0.5272727272727272,
+    "win_rate_wilson_95": {
+      "low": 0.39791319071629383,
+      "high": 0.6530711468951917
+    }
+  },
+  "blowouts": {
+    "win_rate_margin_ge_14": 0.2323943661971831,
+    "loss_rate_margin_le_neg14": 0.2746478873239437
+  },
+  "pythagorean": {
+    "exponent": 2.37
+  },
+  "opp_strength_proxy": {
+    "column_used": "gt_opp_elo_avg"
+  },
+  "elo_gap_bins": [
+    {
+      "n": 1,
+      "win_rate": 0.0,
+      "mean_elo_diff": -914.0
+    },
+    {
+      "n": 1,
+      "win_rate": 0.0,
+      "mean_elo_diff": -868.0
+    },
+    {
+      "n": 4,
+      "win_rate": 0.0,
+      "mean_elo_diff": -731.25
+    },
+    {
+      "n": 2,
+      "win_rate": 0.0,
+      "mean_elo_diff": -539.5
+    },
+    {
+      "n": 9,
+      "win_rate": 0.3333333333333333,
+      "mean_elo_diff": -444.44444444444446
+    },
+    {
+      "n": 8,
+      "win_rate": 0.25,
+      "mean_elo_diff": -349.5
+    },
+    {
+      "n": 11,
+      "win_rate": 0.36363636363636365,
+      "mean_elo_diff": -257.6363636363636
+    },
+    {
+      "n": 19,
+      "win_rate": 0.42105263157894735,
+      "mean_elo_diff": -155.26315789473685
+    },
+    {
+      "n": 26,
+      "win_rate": 0.5,
+      "mean_elo_diff": -59.61538461538461
+    },
+    {
+      "n": 19,
+      "win_rate": 0.47368421052631576,
+      "mean_elo_diff": 54.10526315789474
+    },
+    {
+      "n": 15,
+      "win_rate": 0.6666666666666666,
+      "mean_elo_diff": 156.66666666666666
+    },
+    {
+      "n": 8,
+      "win_rate": 0.5,
+      "mean_elo_diff": 243.625
+    },
+    {
+      "n": 7,
+      "win_rate": 0.7142857142857143,
+      "mean_elo_diff": 341.57142857142856
+    },
+    {
+      "n": 1,
+      "win_rate": 1.0,
+      "mean_elo_diff": 487.0
+    },
+    {
+      "n": 2,
+      "win_rate": 1.0,
+      "mean_elo_diff": 534.5
+    },
+    {
+      "n": 4,
+      "win_rate": 0.75,
+      "mean_elo_diff": 753.75
+    }
+  ]
+}

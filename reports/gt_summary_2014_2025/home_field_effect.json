@@ -1,0 +1,34 @@
+{
+  "note": "Uses non-neutral games only; controls for elo_diff.",
+  "n_games_non_neutral": 128,
+  "margin_model": {
+    "home_adv_points": 2.291536413762455,
+    "home_adv_points_bootstrap_95": {
+      "low": -3.624696635016053,
+      "high": 8.040665277929365
+    },
+    "features": [
+      "is_home",
+      "elo_diff"
+    ]
+  },
+  "win_model": {
+    "home_log_odds": 0.39554849352293925,
+    "home_log_odds_bootstrap_95": {
+      "low": -0.26263136391529285,
+      "high": 1.0689100769991715
+    },
+    "home_odds_ratio": 1.485198589360905,
+    "home_odds_ratio_bootstrap_95": {
+      "low": 0.769025345246388,
+      "high": 2.912203724004737
+    },
+    "p_win_even_away": 0.44776508701145656,
+    "p_win_even_home": 0.5463276649772556,
+    "p_win_even_shift": 0.09856257796579904,
+    "features": [
+      "is_home",
+      "elo_diff"
+    ]
+  }
+}

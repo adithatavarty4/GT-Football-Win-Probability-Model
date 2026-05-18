@@ -1,0 +1,35 @@
+{
+  "n_games": 12,
+  "actual_wins": 9,
+  "expected_wins": 7.705780243407301,
+  "actual_win_rate": 0.75,
+  "actual_win_rate_wilson_95": {
+    "low": 0.46768966087934005,
+    "high": 0.9110599603710386
+  },
+  "accuracy": 0.8333333333333334,
+  "accuracy_bootstrap_95": {
+    "low": 0.5833333333333334,
+    "high": 1.0
+  },
+  "brier": 0.17201902264676672,
+  "brier_bootstrap_95": {
+    "low": 0.11247236908042775,
+    "high": 0.2395734976096227
+  },
+  "log_loss": 0.5216315959043416,
+  "log_loss_bootstrap_95": {
+    "low": 0.38378533251162156,
+    "high": 0.6693903348153571
+  },
+  "log_loss_vs_0p5_delta": -0.17151558465560357,
+  "log_loss_vs_0p5_delta_bootstrap_95": {
+    "low": -0.3093618480483238,
+    "high": -0.02375684574458802
+  },
+  "ece_10bin": 0.1765382976457357,
+  "calibration_logit_fit": {
+    "intercept": 0.7001342059127844,
+    "slope": 0.6802768847675054
+  }
+}

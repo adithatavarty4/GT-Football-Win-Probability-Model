@@ -1,0 +1,86 @@
+Talking Points for the Dashboard (GT 2014–2025 + Model vs Market)
+
+How to frame it (one sentence)
+- “This dashboard summarizes Georgia Tech’s 2014–2025 regular-season performance with uncertainty (confidence intervals), and includes a small 2025 sample comparing my model’s pregame win probabilities to market-implied probabilities.”
+
+1) Record + Win-Rate Confidence Interval
+What it shows:
+- GT is 69–73 over 142 games (48.6% win rate).
+- The 95% Wilson confidence interval is 40.5%–56.7%.
+
+Why it’s impactful:
+- The CI is the key: it tells you how uncertain the win rate estimate is from only 142 games.
+- This keeps the conversation honest: you should describe this span as “around .500” rather than claiming a precise “48.6% team.”
+
+How to explain it out loud:
+- “The win rate is about 49%, but statistically the data supports something more like 41% to 57% as a plausible long-run range.”
+
+2) Average Margin + Bootstrap Confidence Interval
+What it shows:
+- Mean margin is −0.58 points/game (GT slightly negative on average).
+- The 95% bootstrap CI is −3.99 to +3.01, which crosses 0.
+
+Why it’s impactful:
+- Margin captures “how close” games are; it’s often more informative than record alone.
+- The CI crossing 0 means you can’t confidently say GT was meaningfully positive or negative on average across the whole era.
+
+How to explain it out loud:
+- “On average GT was basically break-even in scoring margin over this span, and the uncertainty range includes both slightly better and slightly worse than even.”
+
+3) Home/Away/Neutral Splits
+What it shows:
+- Home (n=73): 57.5% win rate (95% CI: 46.1%–68.2%).
+- Away (n=60): 40.0% win rate (95% CI: 28.6%–52.6%).
+- Neutral (n=9): 33.3% win rate (95% CI: 12.1%–64.6%).
+- Home − Away difference: the 95% bootstrap CI is −17.2pp to +16.9pp (includes 0).
+
+Why it’s impactful:
+- The point estimate suggests home-field advantage, but the “home-minus-away” CI including 0 means the sample is noisy enough that you can’t claim it’s statistically definitive at 95%.
+- Neutral-site is very small sample, so it’s mostly “illustrative,” not a strong conclusion.
+
+How to explain it out loud:
+- “The data suggests GT wins more at home than away, but given the uncertainty we should treat it as suggestive rather than proven from this sample alone.”
+
+4) Win Rate by Year (Chart + Table)
+What it shows:
+- There is large season-to-season variation. Each season is ~12 games, so year-to-year differences can be partly random.
+- In this dataset, 2014 and 2025 are strong seasons by win rate; several seasons from 2019–2022 are weaker.
+
+Why it’s impactful:
+- It shows the “non-stationarity” problem: teams change over time (coaches, players, scheme), so treating the entire 2014–2025 period as one constant level is misleading.
+- The CI band emphasizes that some “peaks/valleys” are clearer than others.
+
+How to explain it out loud:
+- “This isn’t a flat process—GT has clear swings by season, and the error bars remind you that 12 games is a small sample.”
+
+5) Margin Visuals (Histogram + by Year)
+What it shows:
+- The histogram explains whether the era is mostly close games or lots of blowouts.
+- Margin by year helps identify ‘better-than-record’ or ‘worse-than-record’ seasons (margin can be more stable than one-score outcomes).
+
+Why it’s impactful:
+- It prevents overfocusing on only W/L, which can be heavily influenced by a few close outcomes.
+
+How to explain it out loud:
+- “Margin shows whether a season’s record was supported by consistent performance or by a handful of close-game breaks.”
+
+6) 2025: Model vs Betting Market (Implied p-win) Table
+What it shows (in your embedded table):
+- Δ (model − market) highlights where you disagreed with the market.
+- On the 7 rows that include results (W/L):
+  - Model pick accuracy: 71% (5/7)
+  - Market pick accuracy: 57% (4/7)
+  - Brier score: model 0.210 vs market 0.236
+  - Mean Δ: +4.2 percentage points; mean |Δ|: 6.1 points
+
+How accurate is it?
+- Call it “interesting but not conclusive.” This is a *tiny* sample and it’s not the full season table.
+- Markets are strong benchmarks; beating them consistently is hard and requires larger samples to claim anything.
+
+Why it’s impactful:
+- It provides an external reference point and a good narrative: “Here’s where my model took a stand vs consensus.”
+- It helps diagnose bias: e.g., if Δ is consistently positive/negative, the model may be systematically optimistic/pessimistic.
+
+How to explain it out loud (responsible version):
+- “In this small sample, my model slightly outperformed the market on accuracy/Brier, but it’s not enough data to claim I beat the market—this is more of a calibration and bias check.”
+

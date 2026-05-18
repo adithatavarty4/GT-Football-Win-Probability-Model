@@ -1,0 +1,44 @@
+Georgia Tech (GT) 2014–2025 Basic Statistical Summary (Regular Season)
+
+Data used
+- Source: data_processed/model_dataset.csv
+- Scope: Regular-season games from 2014 through 2025 (n = 142 games)
+- Outcomes: gt_win (1 = GT win, 0 = GT loss)
+- Margin: margin = GT points − opponent points
+
+1) Overall record and win rate (with uncertainty)
+- Record: 69–73 across 142 games.
+- Observed win rate: 48.6%.
+- 95% confidence interval (Wilson) for the true win rate: 40.5% to 56.7%.
+
+Why this matters:
+The raw win rate (48.6%) is just an estimate from a finite sample. The confidence interval shows the range of “plausible” long-run win rates consistent with 2014–2025 results. This helps you avoid overconfident conclusions like “GT is a 49% team” when the data supports a fairly wide range.
+
+2) Average scoring margin (with uncertainty)
+- Mean margin: −0.58 points per game (GT slightly negative on average).
+- 95% confidence interval (bootstrap) for mean margin: −3.99 to +3.01 points.
+
+Why this matters:
+Margin captures how close games were, not just whether GT won. A near-zero average margin with a wide interval suggests GT often played many relatively close games over this span, and that the “true” average margin could reasonably be a few points better or worse.
+
+3) Home/away/neutral splits (with uncertainty)
+- Home (non-neutral): 73 games, win rate 57.5% (95% CI: 46.1% to 68.2%).
+- Away (non-neutral): 60 games, win rate 40.0% (95% CI: 28.6% to 52.6%).
+- Neutral: 9 games, win rate 33.3% (95% CI: 12.1% to 64.6%).
+
+Home vs away difference:
+- Estimated home-minus-away win-rate gap is positive in the point estimate (57.5% − 40.0% = 17.5 percentage points),
+  but the 95% bootstrap interval for that difference is −17.2 to +16.9 points.
+
+Why this matters:
+The splits suggest a home-field advantage in the point estimates, but the uncertainty interval for the home-vs-away difference crosses zero. That means that, with this sample alone, you can’t confidently claim the home advantage is “statistically clear” at the 95% level (it might be real, but the data is noisy enough that chance variation could explain it).
+
+4) Visualizations produced (what they show)
+- winrate_by_year.png: GT win rate by season with uncertainty bars. This helps identify seasons that were clearly strong/weak versus seasons where the win rate difference could just be noise.
+- margin_hist.png: distribution of GT margins. This shows how many games were close vs blowouts and whether GT tended to win/lose by small or large amounts.
+- margin_by_year.png: margin by season. This often tracks team quality better than win rate and helps spot “better than record” or “worse than record” years.
+
+What this analysis does (and doesn’t) claim
+- This is descriptive + uncertainty quantification for GT’s results from 2014–2025. It answers: “What happened, and how sure are we?”
+- It does not explain causes (coaching, injuries, recruiting, schedule strength) on its own; it just summarizes outcomes and variability.
+

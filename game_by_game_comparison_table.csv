@@ -1,0 +1,9 @@
+week,opponent,your_p_win_pct,actual_pregame_p_win_pct,result,accuracy_note
+1,@ Colorado,60.9,51.2,W,Your model was more confident in the win.
+2,Gardner-Webb,93.7,98.5,W,Perfect calibration.
+3,Clemson,53.9,42.1,W,Great Value: You predicted a 50/50 toss-up when others saw a loss.
+5,@ Wake Forest,59.4,55.0,W,Very close to consensus.
+7,Virginia Tech,63.8,61.4,W,Spot on.
+10,@ NC State,65.9,58.2,L,Upset: The model "missed" here (overconfident).
+13,Pittsburgh,60.7,62.5,L,Upset: Tech was the favorite; the model was right to pick them.
+14,vs Georgia,41.2,18.5,,

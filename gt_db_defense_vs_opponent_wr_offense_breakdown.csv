@@ -1,0 +1,133 @@
+gt_team,opponent,type,gt_db_name,gt_db_position,gt_db_run_defense,gt_db_pass_defense,opp_wr_pass_grade,opp_wr_run_grade,opp_wr_name,opp_wr_targets,delta_run,delta_pass
+GA TECH,BOSTON COL,vs_offense_avg,Ahmari Harvey,DB,64.5,77.3,68.46,68.46,,,-3.96,8.84
+GA TECH,BOSTON COL,vs_wr_rank_1,Ahmari Harvey,DB,64.5,77.3,70.6,70.6,Lewis Bond,60.0,-6.1,6.7
+GA TECH,BOSTON COL,vs_wr_rank_2,Ahmari Harvey,DB,64.5,77.3,64.8,64.8,Reed Harris,35.0,-0.3,12.5
+GA TECH,BOSTON COL,vs_offense_avg,Rodney Shelley,DB,64.2,66.7,68.46,68.46,,,-4.26,-1.76
+GA TECH,BOSTON COL,vs_wr_rank_1,Rodney Shelley,DB,64.2,66.7,70.6,70.6,Lewis Bond,60.0,-6.4,-3.9
+GA TECH,BOSTON COL,vs_wr_rank_2,Rodney Shelley,DB,64.2,66.7,64.8,64.8,Reed Harris,35.0,-0.6,1.9
+GA TECH,BOSTON COL,vs_offense_avg,Zachary Tobe,DB,63.0,58.8,68.46,68.46,,,-5.46,-9.66
+GA TECH,BOSTON COL,vs_wr_rank_1,Zachary Tobe,DB,63.0,58.8,70.6,70.6,Lewis Bond,60.0,-7.6,-11.8
+GA TECH,BOSTON COL,vs_wr_rank_2,Zachary Tobe,DB,63.0,58.8,64.8,64.8,Reed Harris,35.0,-1.8,-6.0
+GA TECH,BOSTON COL,vs_offense_avg,Daiquan White,DB,72.3,61.3,68.46,68.46,,,3.84,-7.16
+GA TECH,BOSTON COL,vs_wr_rank_1,Daiquan White,DB,72.3,61.3,70.6,70.6,Lewis Bond,60.0,1.7,-9.3
+GA TECH,BOSTON COL,vs_wr_rank_2,Daiquan White,DB,72.3,61.3,64.8,64.8,Reed Harris,35.0,7.5,-3.5
+GA TECH,BOSTON COL,vs_offense_avg,Jon Mitchell,DB,78.9,65.5,68.46,68.46,,,10.44,-2.96
+GA TECH,BOSTON COL,vs_wr_rank_1,Jon Mitchell,DB,78.9,65.5,70.6,70.6,Lewis Bond,60.0,8.3,-5.1
+GA TECH,BOSTON COL,vs_wr_rank_2,Jon Mitchell,DB,78.9,65.5,64.8,64.8,Reed Harris,35.0,14.1,0.7
+GA TECH,BOSTON COL,vs_offense_avg,Kelvin Hill,DB,65.2,58.5,68.46,68.46,,,-3.26,-9.96
+GA TECH,BOSTON COL,vs_wr_rank_1,Kelvin Hill,DB,65.2,58.5,70.6,70.6,Lewis Bond,60.0,-5.4,-12.1
+GA TECH,BOSTON COL,vs_wr_rank_2,Kelvin Hill,DB,65.2,58.5,64.8,64.8,Reed Harris,35.0,0.4,-6.3
+GA TECH,NC STATE,vs_offense_avg,Ahmari Harvey,DB,64.5,77.3,66.79,66.79,,,-2.29,10.51
+GA TECH,NC STATE,vs_wr_rank_1,Ahmari Harvey,DB,64.5,77.3,59.4,59.4,Keenan Jackson,29.0,5.1,17.9
+GA TECH,NC STATE,vs_wr_rank_2,Ahmari Harvey,DB,64.5,77.3,79.5,79.5,Terrell Anderson,29.0,-15.0,-2.2
+GA TECH,NC STATE,vs_wr_rank_3,Ahmari Harvey,DB,64.5,77.3,63.4,63.4,Wesley Grimes,23.0,1.1,13.9
+GA TECH,NC STATE,vs_wr_rank_4,Ahmari Harvey,DB,64.5,77.3,67.0,67.0,Noah Rogers,22.0,-2.5,10.3
+GA TECH,NC STATE,vs_wr_rank_5,Ahmari Harvey,DB,64.5,77.3,62.5,62.5,Teddy Hoffmann,19.0,2.0,14.8
+GA TECH,NC STATE,vs_offense_avg,Rodney Shelley,DB,64.2,66.7,66.79,66.79,,,-2.59,-0.09
+GA TECH,NC STATE,vs_wr_rank_1,Rodney Shelley,DB,64.2,66.7,59.4,59.4,Keenan Jackson,29.0,4.8,7.3
+GA TECH,NC STATE,vs_wr_rank_2,Rodney Shelley,DB,64.2,66.7,79.5,79.5,Terrell Anderson,29.0,-15.3,-12.8
+GA TECH,NC STATE,vs_wr_rank_3,Rodney Shelley,DB,64.2,66.7,63.4,63.4,Wesley Grimes,23.0,0.8,3.3
+GA TECH,NC STATE,vs_wr_rank_4,Rodney Shelley,DB,64.2,66.7,67.0,67.0,Noah Rogers,22.0,-2.8,-0.3
+GA TECH,NC STATE,vs_wr_rank_5,Rodney Shelley,DB,64.2,66.7,62.5,62.5,Teddy Hoffmann,19.0,1.7,4.2
+GA TECH,NC STATE,vs_offense_avg,Zachary Tobe,DB,63.0,58.8,66.79,66.79,,,-3.79,-7.99
+GA TECH,NC STATE,vs_wr_rank_1,Zachary Tobe,DB,63.0,58.8,59.4,59.4,Keenan Jackson,29.0,3.6,-0.6
+GA TECH,NC STATE,vs_wr_rank_2,Zachary Tobe,DB,63.0,58.8,79.5,79.5,Terrell Anderson,29.0,-16.5,-20.7
+GA TECH,NC STATE,vs_wr_rank_3,Zachary Tobe,DB,63.0,58.8,63.4,63.4,Wesley Grimes,23.0,-0.4,-4.6
+GA TECH,NC STATE,vs_wr_rank_4,Zachary Tobe,DB,63.0,58.8,67.0,67.0,Noah Rogers,22.0,-4.0,-8.2
+GA TECH,NC STATE,vs_wr_rank_5,Zachary Tobe,DB,63.0,58.8,62.5,62.5,Teddy Hoffmann,19.0,0.5,-3.7
+GA TECH,NC STATE,vs_offense_avg,Daiquan White,DB,72.3,61.3,66.79,66.79,,,5.51,-5.49
+GA TECH,NC STATE,vs_wr_rank_1,Daiquan White,DB,72.3,61.3,59.4,59.4,Keenan Jackson,29.0,12.9,1.9
+GA TECH,NC STATE,vs_wr_rank_2,Daiquan White,DB,72.3,61.3,79.5,79.5,Terrell Anderson,29.0,-7.2,-18.2
+GA TECH,NC STATE,vs_wr_rank_3,Daiquan White,DB,72.3,61.3,63.4,63.4,Wesley Grimes,23.0,8.9,-2.1
+GA TECH,NC STATE,vs_wr_rank_4,Daiquan White,DB,72.3,61.3,67.0,67.0,Noah Rogers,22.0,5.3,-5.7
+GA TECH,NC STATE,vs_wr_rank_5,Daiquan White,DB,72.3,61.3,62.5,62.5,Teddy Hoffmann,19.0,9.8,-1.2
+GA TECH,NC STATE,vs_offense_avg,Jon Mitchell,DB,78.9,65.5,66.79,66.79,,,12.11,-1.29
+GA TECH,NC STATE,vs_wr_rank_1,Jon Mitchell,DB,78.9,65.5,59.4,59.4,Keenan Jackson,29.0,19.5,6.1
+GA TECH,NC STATE,vs_wr_rank_2,Jon Mitchell,DB,78.9,65.5,79.5,79.5,Terrell Anderson,29.0,-0.6,-14.0
+GA TECH,NC STATE,vs_wr_rank_3,Jon Mitchell,DB,78.9,65.5,63.4,63.4,Wesley Grimes,23.0,15.5,2.1
+GA TECH,NC STATE,vs_wr_rank_4,Jon Mitchell,DB,78.9,65.5,67.0,67.0,Noah Rogers,22.0,11.9,-1.5
+GA TECH,NC STATE,vs_wr_rank_5,Jon Mitchell,DB,78.9,65.5,62.5,62.5,Teddy Hoffmann,19.0,16.4,3.0
+GA TECH,NC STATE,vs_offense_avg,Kelvin Hill,DB,65.2,58.5,66.79,66.79,,,-1.59,-8.29
+GA TECH,NC STATE,vs_wr_rank_1,Kelvin Hill,DB,65.2,58.5,59.4,59.4,Keenan Jackson,29.0,5.8,-0.9
+GA TECH,NC STATE,vs_wr_rank_2,Kelvin Hill,DB,65.2,58.5,79.5,79.5,Terrell Anderson,29.0,-14.3,-21.0
+GA TECH,NC STATE,vs_wr_rank_3,Kelvin Hill,DB,65.2,58.5,63.4,63.4,Wesley Grimes,23.0,1.8,-4.9
+GA TECH,NC STATE,vs_wr_rank_4,Kelvin Hill,DB,65.2,58.5,67.0,67.0,Noah Rogers,22.0,-1.8,-8.5
+GA TECH,NC STATE,vs_wr_rank_5,Kelvin Hill,DB,65.2,58.5,62.5,62.5,Teddy Hoffmann,19.0,2.7,-4.0
+GA TECH,GEORGIA,vs_offense_avg,Ahmari Harvey,DB,64.5,77.3,71.54,71.54,,,-7.04,5.76
+GA TECH,GEORGIA,vs_wr_rank_1,Ahmari Harvey,DB,64.5,77.3,77.2,77.2,Zachariah Branch,44.0,-12.7,0.1
+GA TECH,GEORGIA,vs_wr_rank_2,Ahmari Harvey,DB,64.5,77.3,74.2,74.2,Colbie Young,29.0,-9.7,3.1
+GA TECH,GEORGIA,vs_wr_rank_3,Ahmari Harvey,DB,64.5,77.3,59.8,59.8,Dillon Bell,19.0,4.7,17.5
+GA TECH,GEORGIA,vs_wr_rank_4,Ahmari Harvey,DB,64.5,77.3,65.5,65.5,London Humphreys,17.0,-1.0,11.8
+GA TECH,GEORGIA,vs_offense_avg,Rodney Shelley,DB,64.2,66.7,71.54,71.54,,,-7.34,-4.84
+GA TECH,GEORGIA,vs_wr_rank_1,Rodney Shelley,DB,64.2,66.7,77.2,77.2,Zachariah Branch,44.0,-13.0,-10.5
+GA TECH,GEORGIA,vs_wr_rank_2,Rodney Shelley,DB,64.2,66.7,74.2,74.2,Colbie Young,29.0,-10.0,-7.5
+GA TECH,GEORGIA,vs_wr_rank_3,Rodney Shelley,DB,64.2,66.7,59.8,59.8,Dillon Bell,19.0,4.4,6.9
+GA TECH,GEORGIA,vs_wr_rank_4,Rodney Shelley,DB,64.2,66.7,65.5,65.5,London Humphreys,17.0,-1.3,1.2
+GA TECH,GEORGIA,vs_offense_avg,Zachary Tobe,DB,63.0,58.8,71.54,71.54,,,-8.54,-12.74
+GA TECH,GEORGIA,vs_wr_rank_1,Zachary Tobe,DB,63.0,58.8,77.2,77.2,Zachariah Branch,44.0,-14.2,-18.4
+GA TECH,GEORGIA,vs_wr_rank_2,Zachary Tobe,DB,63.0,58.8,74.2,74.2,Colbie Young,29.0,-11.2,-15.4
+GA TECH,GEORGIA,vs_wr_rank_3,Zachary Tobe,DB,63.0,58.8,59.8,59.8,Dillon Bell,19.0,3.2,-1.0
+GA TECH,GEORGIA,vs_wr_rank_4,Zachary Tobe,DB,63.0,58.8,65.5,65.5,London Humphreys,17.0,-2.5,-6.7
+GA TECH,GEORGIA,vs_offense_avg,Daiquan White,DB,72.3,61.3,71.54,71.54,,,0.76,-10.24
+GA TECH,GEORGIA,vs_wr_rank_1,Daiquan White,DB,72.3,61.3,77.2,77.2,Zachariah Branch,44.0,-4.9,-15.9
+GA TECH,GEORGIA,vs_wr_rank_2,Daiquan White,DB,72.3,61.3,74.2,74.2,Colbie Young,29.0,-1.9,-12.9
+GA TECH,GEORGIA,vs_wr_rank_3,Daiquan White,DB,72.3,61.3,59.8,59.8,Dillon Bell,19.0,12.5,1.5
+GA TECH,GEORGIA,vs_wr_rank_4,Daiquan White,DB,72.3,61.3,65.5,65.5,London Humphreys,17.0,6.8,-4.2
+GA TECH,GEORGIA,vs_offense_avg,Jon Mitchell,DB,78.9,65.5,71.54,71.54,,,7.36,-6.04
+GA TECH,GEORGIA,vs_wr_rank_1,Jon Mitchell,DB,78.9,65.5,77.2,77.2,Zachariah Branch,44.0,1.7,-11.7
+GA TECH,GEORGIA,vs_wr_rank_2,Jon Mitchell,DB,78.9,65.5,74.2,74.2,Colbie Young,29.0,4.7,-8.7
+GA TECH,GEORGIA,vs_wr_rank_3,Jon Mitchell,DB,78.9,65.5,59.8,59.8,Dillon Bell,19.0,19.1,5.7
+GA TECH,GEORGIA,vs_wr_rank_4,Jon Mitchell,DB,78.9,65.5,65.5,65.5,London Humphreys,17.0,13.4,0.0
+GA TECH,GEORGIA,vs_offense_avg,Kelvin Hill,DB,65.2,58.5,71.54,71.54,,,-6.34,-13.04
+GA TECH,GEORGIA,vs_wr_rank_1,Kelvin Hill,DB,65.2,58.5,77.2,77.2,Zachariah Branch,44.0,-12.0,-18.7
+GA TECH,GEORGIA,vs_wr_rank_2,Kelvin Hill,DB,65.2,58.5,74.2,74.2,Colbie Young,29.0,-9.0,-15.7
+GA TECH,GEORGIA,vs_wr_rank_3,Kelvin Hill,DB,65.2,58.5,59.8,59.8,Dillon Bell,19.0,5.4,-1.3
+GA TECH,GEORGIA,vs_wr_rank_4,Kelvin Hill,DB,65.2,58.5,65.5,65.5,London Humphreys,17.0,-0.3,-7.0
+GA TECH,PITTSBURGH,vs_offense_avg,Ahmari Harvey,DB,64.5,77.3,64.87,64.87,,,-0.37,12.43
+GA TECH,PITTSBURGH,vs_wr_rank_1,Ahmari Harvey,DB,64.5,77.3,66.0,66.0,Kenny Johnson,41.0,-1.5,11.3
+GA TECH,PITTSBURGH,vs_wr_rank_2,Ahmari Harvey,DB,64.5,77.3,64.1,64.1,Raphael Williams Jr.,40.0,0.4,13.2
+GA TECH,PITTSBURGH,vs_wr_rank_3,Ahmari Harvey,DB,64.5,77.3,64.2,64.2,Cataurus Hicks,23.0,0.3,13.1
+GA TECH,PITTSBURGH,vs_offense_avg,Rodney Shelley,DB,64.2,66.7,64.87,64.87,,,-0.67,1.83
+GA TECH,PITTSBURGH,vs_wr_rank_1,Rodney Shelley,DB,64.2,66.7,66.0,66.0,Kenny Johnson,41.0,-1.8,0.7
+GA TECH,PITTSBURGH,vs_wr_rank_2,Rodney Shelley,DB,64.2,66.7,64.1,64.1,Raphael Williams Jr.,40.0,0.1,2.6
+GA TECH,PITTSBURGH,vs_wr_rank_3,Rodney Shelley,DB,64.2,66.7,64.2,64.2,Cataurus Hicks,23.0,0.0,2.5
+GA TECH,PITTSBURGH,vs_offense_avg,Zachary Tobe,DB,63.0,58.8,64.87,64.87,,,-1.87,-6.07
+GA TECH,PITTSBURGH,vs_wr_rank_1,Zachary Tobe,DB,63.0,58.8,66.0,66.0,Kenny Johnson,41.0,-3.0,-7.2
+GA TECH,PITTSBURGH,vs_wr_rank_2,Zachary Tobe,DB,63.0,58.8,64.1,64.1,Raphael Williams Jr.,40.0,-1.1,-5.3
+GA TECH,PITTSBURGH,vs_wr_rank_3,Zachary Tobe,DB,63.0,58.8,64.2,64.2,Cataurus Hicks,23.0,-1.2,-5.4
+GA TECH,PITTSBURGH,vs_offense_avg,Daiquan White,DB,72.3,61.3,64.87,64.87,,,7.43,-3.57
+GA TECH,PITTSBURGH,vs_wr_rank_1,Daiquan White,DB,72.3,61.3,66.0,66.0,Kenny Johnson,41.0,6.3,-4.7
+GA TECH,PITTSBURGH,vs_wr_rank_2,Daiquan White,DB,72.3,61.3,64.1,64.1,Raphael Williams Jr.,40.0,8.2,-2.8
+GA TECH,PITTSBURGH,vs_wr_rank_3,Daiquan White,DB,72.3,61.3,64.2,64.2,Cataurus Hicks,23.0,8.1,-2.9
+GA TECH,PITTSBURGH,vs_offense_avg,Jon Mitchell,DB,78.9,65.5,64.87,64.87,,,14.03,0.63
+GA TECH,PITTSBURGH,vs_wr_rank_1,Jon Mitchell,DB,78.9,65.5,66.0,66.0,Kenny Johnson,41.0,12.9,-0.5
+GA TECH,PITTSBURGH,vs_wr_rank_2,Jon Mitchell,DB,78.9,65.5,64.1,64.1,Raphael Williams Jr.,40.0,14.8,1.4
+GA TECH,PITTSBURGH,vs_wr_rank_3,Jon Mitchell,DB,78.9,65.5,64.2,64.2,Cataurus Hicks,23.0,14.7,1.3
+GA TECH,PITTSBURGH,vs_offense_avg,Kelvin Hill,DB,65.2,58.5,64.87,64.87,,,0.33,-6.37
+GA TECH,PITTSBURGH,vs_wr_rank_1,Kelvin Hill,DB,65.2,58.5,66.0,66.0,Kenny Johnson,41.0,-0.8,-7.5
+GA TECH,PITTSBURGH,vs_wr_rank_2,Kelvin Hill,DB,65.2,58.5,64.1,64.1,Raphael Williams Jr.,40.0,1.1,-5.6
+GA TECH,PITTSBURGH,vs_wr_rank_3,Kelvin Hill,DB,65.2,58.5,64.2,64.2,Cataurus Hicks,23.0,1.0,-5.7
+GA TECH,SYRACUSE,vs_offense_avg,Ahmari Harvey,DB,64.5,77.3,65.93,65.93,,,-1.43,11.37
+GA TECH,SYRACUSE,vs_wr_rank_1,Ahmari Harvey,DB,64.5,77.3,66.5,66.5,Johntay Cook,55.0,-2.0,10.8
+GA TECH,SYRACUSE,vs_wr_rank_2,Ahmari Harvey,DB,64.5,77.3,63.2,63.2,Darrell Gill Jr.,41.0,1.3,14.1
+GA TECH,SYRACUSE,vs_wr_rank_3,Ahmari Harvey,DB,64.5,77.3,68.1,68.1,Justus Ross-Simmons,37.0,-3.6,9.2
+GA TECH,SYRACUSE,vs_offense_avg,Rodney Shelley,DB,64.2,66.7,65.93,65.93,,,-1.73,0.77
+GA TECH,SYRACUSE,vs_wr_rank_1,Rodney Shelley,DB,64.2,66.7,66.5,66.5,Johntay Cook,55.0,-2.3,0.2
+GA TECH,SYRACUSE,vs_wr_rank_2,Rodney Shelley,DB,64.2,66.7,63.2,63.2,Darrell Gill Jr.,41.0,1.0,3.5
+GA TECH,SYRACUSE,vs_wr_rank_3,Rodney Shelley,DB,64.2,66.7,68.1,68.1,Justus Ross-Simmons,37.0,-3.9,-1.4
+GA TECH,SYRACUSE,vs_offense_avg,Zachary Tobe,DB,63.0,58.8,65.93,65.93,,,-2.93,-7.13
+GA TECH,SYRACUSE,vs_wr_rank_1,Zachary Tobe,DB,63.0,58.8,66.5,66.5,Johntay Cook,55.0,-3.5,-7.7
+GA TECH,SYRACUSE,vs_wr_rank_2,Zachary Tobe,DB,63.0,58.8,63.2,63.2,Darrell Gill Jr.,41.0,-0.2,-4.4
+GA TECH,SYRACUSE,vs_wr_rank_3,Zachary Tobe,DB,63.0,58.8,68.1,68.1,Justus Ross-Simmons,37.0,-5.1,-9.3
+GA TECH,SYRACUSE,vs_offense_avg,Daiquan White,DB,72.3,61.3,65.93,65.93,,,6.37,-4.63
+GA TECH,SYRACUSE,vs_wr_rank_1,Daiquan White,DB,72.3,61.3,66.5,66.5,Johntay Cook,55.0,5.8,-5.2
+GA TECH,SYRACUSE,vs_wr_rank_2,Daiquan White,DB,72.3,61.3,63.2,63.2,Darrell Gill Jr.,41.0,9.1,-1.9
+GA TECH,SYRACUSE,vs_wr_rank_3,Daiquan White,DB,72.3,61.3,68.1,68.1,Justus Ross-Simmons,37.0,4.2,-6.8
+GA TECH,SYRACUSE,vs_offense_avg,Jon Mitchell,DB,78.9,65.5,65.93,65.93,,,12.97,-0.43
+GA TECH,SYRACUSE,vs_wr_rank_1,Jon Mitchell,DB,78.9,65.5,66.5,66.5,Johntay Cook,55.0,12.4,-1.0
+GA TECH,SYRACUSE,vs_wr_rank_2,Jon Mitchell,DB,78.9,65.5,63.2,63.2,Darrell Gill Jr.,41.0,15.7,2.3
+GA TECH,SYRACUSE,vs_wr_rank_3,Jon Mitchell,DB,78.9,65.5,68.1,68.1,Justus Ross-Simmons,37.0,10.8,-2.6
+GA TECH,SYRACUSE,vs_offense_avg,Kelvin Hill,DB,65.2,58.5,65.93,65.93,,,-0.73,-7.43
+GA TECH,SYRACUSE,vs_wr_rank_1,Kelvin Hill,DB,65.2,58.5,66.5,66.5,Johntay Cook,55.0,-1.3,-8.0
+GA TECH,SYRACUSE,vs_wr_rank_2,Kelvin Hill,DB,65.2,58.5,63.2,63.2,Darrell Gill Jr.,41.0,2.0,-4.7
+GA TECH,SYRACUSE,vs_wr_rank_3,Kelvin Hill,DB,65.2,58.5,68.1,68.1,Justus Ross-Simmons,37.0,-2.9,-9.6

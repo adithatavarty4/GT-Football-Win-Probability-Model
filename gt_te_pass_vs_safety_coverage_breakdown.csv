@@ -1,0 +1,121 @@
+gt_team,opponent,type,player,player_position,player_pass_grade,player_run_grade,opp_safety_coverage_grade,opp_safety_run_grade,opp_safety_name,opp_safety_snaps,delta_pass_coverage,delta_run_defense
+GA TECH,BOSTON COL,vs_defense_avg,Luke Harpring,TE,70.4,56.4,61.22,68.5,,,9.18,-12.1
+GA TECH,BOSTON COL,vs_safety_rank_1,Luke Harpring,TE,70.4,56.4,54.9,61.8,KP Price,445.0,15.5,-5.4
+GA TECH,BOSTON COL,vs_safety_rank_2,Luke Harpring,TE,70.4,56.4,67.4,67.8,Omar Thornton,395.0,3.0,-11.4
+GA TECH,BOSTON COL,vs_safety_rank_3,Luke Harpring,TE,70.4,56.4,64.4,80.3,Carter Davis,372.0,6.0,-23.9
+GA TECH,BOSTON COL,vs_safety_rank_4,Luke Harpring,TE,70.4,56.4,48.5,66.1,Omarion Davis,99.0,21.9,-9.7
+GA TECH,BOSTON COL,vs_safety_rank_5,Luke Harpring,TE,70.4,56.4,68.0,55.2,Marcus Upton,67.0,2.4,1.2
+GA TECH,BOSTON COL,vs_defense_avg,Brett Seither,TE,50.4,53.9,61.22,68.5,,,-10.82,-14.6
+GA TECH,BOSTON COL,vs_safety_rank_1,Brett Seither,TE,50.4,53.9,54.9,61.8,KP Price,445.0,-4.5,-7.9
+GA TECH,BOSTON COL,vs_safety_rank_2,Brett Seither,TE,50.4,53.9,67.4,67.8,Omar Thornton,395.0,-17.0,-13.9
+GA TECH,BOSTON COL,vs_safety_rank_3,Brett Seither,TE,50.4,53.9,64.4,80.3,Carter Davis,372.0,-14.0,-26.4
+GA TECH,BOSTON COL,vs_safety_rank_4,Brett Seither,TE,50.4,53.9,48.5,66.1,Omarion Davis,99.0,1.9,-12.2
+GA TECH,BOSTON COL,vs_safety_rank_5,Brett Seither,TE,50.4,53.9,68.0,55.2,Marcus Upton,67.0,-17.6,-1.3
+GA TECH,BOSTON COL,vs_defense_avg,Josh Beetham,TE,76.9,49.9,61.22,68.5,,,15.68,-18.6
+GA TECH,BOSTON COL,vs_safety_rank_1,Josh Beetham,TE,76.9,49.9,54.9,61.8,KP Price,445.0,22.0,-11.9
+GA TECH,BOSTON COL,vs_safety_rank_2,Josh Beetham,TE,76.9,49.9,67.4,67.8,Omar Thornton,395.0,9.5,-17.9
+GA TECH,BOSTON COL,vs_safety_rank_3,Josh Beetham,TE,76.9,49.9,64.4,80.3,Carter Davis,372.0,12.5,-30.4
+GA TECH,BOSTON COL,vs_safety_rank_4,Josh Beetham,TE,76.9,49.9,48.5,66.1,Omarion Davis,99.0,28.4,-16.2
+GA TECH,BOSTON COL,vs_safety_rank_5,Josh Beetham,TE,76.9,49.9,68.0,55.2,Marcus Upton,67.0,8.9,-5.3
+GA TECH,BOSTON COL,vs_defense_avg,J.T. Byrne,TE,54.2,50.4,61.22,68.5,,,-7.02,-18.1
+GA TECH,BOSTON COL,vs_safety_rank_1,J.T. Byrne,TE,54.2,50.4,54.9,61.8,KP Price,445.0,-0.7,-11.4
+GA TECH,BOSTON COL,vs_safety_rank_2,J.T. Byrne,TE,54.2,50.4,67.4,67.8,Omar Thornton,395.0,-13.2,-17.4
+GA TECH,BOSTON COL,vs_safety_rank_3,J.T. Byrne,TE,54.2,50.4,64.4,80.3,Carter Davis,372.0,-10.2,-29.9
+GA TECH,BOSTON COL,vs_safety_rank_4,J.T. Byrne,TE,54.2,50.4,48.5,66.1,Omarion Davis,99.0,5.7,-15.7
+GA TECH,BOSTON COL,vs_safety_rank_5,J.T. Byrne,TE,54.2,50.4,68.0,55.2,Marcus Upton,67.0,-13.8,-4.8
+GA TECH,NC STATE,vs_defense_avg,Luke Harpring,TE,70.4,56.4,54.32,66.12,,,16.08,-9.72
+GA TECH,NC STATE,vs_safety_rank_1,Luke Harpring,TE,70.4,56.4,44.6,65.7,Ronnie Royal III,345.0,25.8,-9.3
+GA TECH,NC STATE,vs_safety_rank_2,Luke Harpring,TE,70.4,56.4,57.9,57.8,JJ Johnson,256.0,12.5,-1.4
+GA TECH,NC STATE,vs_safety_rank_3,Luke Harpring,TE,70.4,56.4,64.9,71.2,Asaad Brown Jr.,256.0,5.5,-14.8
+GA TECH,NC STATE,vs_safety_rank_4,Luke Harpring,TE,70.4,56.4,51.9,69.8,Brody Barnhardt,209.0,18.5,-13.4
+GA TECH,NC STATE,vs_safety_rank_5,Luke Harpring,TE,70.4,56.4,57.8,69.2,Jivan Baly,66.0,12.6,-12.8
+GA TECH,NC STATE,vs_defense_avg,Brett Seither,TE,50.4,53.9,54.32,66.12,,,-3.92,-12.22
+GA TECH,NC STATE,vs_safety_rank_1,Brett Seither,TE,50.4,53.9,44.6,65.7,Ronnie Royal III,345.0,5.8,-11.8
+GA TECH,NC STATE,vs_safety_rank_2,Brett Seither,TE,50.4,53.9,57.9,57.8,JJ Johnson,256.0,-7.5,-3.9
+GA TECH,NC STATE,vs_safety_rank_3,Brett Seither,TE,50.4,53.9,64.9,71.2,Asaad Brown Jr.,256.0,-14.5,-17.3
+GA TECH,NC STATE,vs_safety_rank_4,Brett Seither,TE,50.4,53.9,51.9,69.8,Brody Barnhardt,209.0,-1.5,-15.9
+GA TECH,NC STATE,vs_safety_rank_5,Brett Seither,TE,50.4,53.9,57.8,69.2,Jivan Baly,66.0,-7.4,-15.3
+GA TECH,NC STATE,vs_defense_avg,Josh Beetham,TE,76.9,49.9,54.32,66.12,,,22.58,-16.22
+GA TECH,NC STATE,vs_safety_rank_1,Josh Beetham,TE,76.9,49.9,44.6,65.7,Ronnie Royal III,345.0,32.3,-15.8
+GA TECH,NC STATE,vs_safety_rank_2,Josh Beetham,TE,76.9,49.9,57.9,57.8,JJ Johnson,256.0,19.0,-7.9
+GA TECH,NC STATE,vs_safety_rank_3,Josh Beetham,TE,76.9,49.9,64.9,71.2,Asaad Brown Jr.,256.0,12.0,-21.3
+GA TECH,NC STATE,vs_safety_rank_4,Josh Beetham,TE,76.9,49.9,51.9,69.8,Brody Barnhardt,209.0,25.0,-19.9
+GA TECH,NC STATE,vs_safety_rank_5,Josh Beetham,TE,76.9,49.9,57.8,69.2,Jivan Baly,66.0,19.1,-19.3
+GA TECH,NC STATE,vs_defense_avg,J.T. Byrne,TE,54.2,50.4,54.32,66.12,,,-0.12,-15.72
+GA TECH,NC STATE,vs_safety_rank_1,J.T. Byrne,TE,54.2,50.4,44.6,65.7,Ronnie Royal III,345.0,9.6,-15.3
+GA TECH,NC STATE,vs_safety_rank_2,J.T. Byrne,TE,54.2,50.4,57.9,57.8,JJ Johnson,256.0,-3.7,-7.4
+GA TECH,NC STATE,vs_safety_rank_3,J.T. Byrne,TE,54.2,50.4,64.9,71.2,Asaad Brown Jr.,256.0,-10.7,-20.8
+GA TECH,NC STATE,vs_safety_rank_4,J.T. Byrne,TE,54.2,50.4,51.9,69.8,Brody Barnhardt,209.0,2.3,-19.4
+GA TECH,NC STATE,vs_safety_rank_5,J.T. Byrne,TE,54.2,50.4,57.8,69.2,Jivan Baly,66.0,-3.6,-18.8
+GA TECH,GEORGIA,vs_defense_avg,Luke Harpring,TE,70.4,56.4,68.98,80.54,,,1.42,-24.14
+GA TECH,GEORGIA,vs_safety_rank_1,Luke Harpring,TE,70.4,56.4,75.8,84.3,KJ Bolden,392.0,-5.4,-27.9
+GA TECH,GEORGIA,vs_safety_rank_2,Luke Harpring,TE,70.4,56.4,66.9,79.5,Joenel Aguero,357.0,3.5,-23.1
+GA TECH,GEORGIA,vs_safety_rank_3,Luke Harpring,TE,70.4,56.4,59.7,84.9,Kyron Jones,209.0,10.7,-28.5
+GA TECH,GEORGIA,vs_safety_rank_4,Luke Harpring,TE,70.4,56.4,70.5,79.0,JaCorey Thomas,207.0,-0.1,-22.6
+GA TECH,GEORGIA,vs_safety_rank_5,Luke Harpring,TE,70.4,56.4,66.8,63.9,Adrian Maddox,64.0,3.6,-7.5
+GA TECH,GEORGIA,vs_safety_rank_6,Luke Harpring,TE,70.4,56.4,66.0,69.3,Zion Branch,56.0,4.4,-12.9
+GA TECH,GEORGIA,vs_defense_avg,Brett Seither,TE,50.4,53.9,68.98,80.54,,,-18.58,-26.64
+GA TECH,GEORGIA,vs_safety_rank_1,Brett Seither,TE,50.4,53.9,75.8,84.3,KJ Bolden,392.0,-25.4,-30.4
+GA TECH,GEORGIA,vs_safety_rank_2,Brett Seither,TE,50.4,53.9,66.9,79.5,Joenel Aguero,357.0,-16.5,-25.6
+GA TECH,GEORGIA,vs_safety_rank_3,Brett Seither,TE,50.4,53.9,59.7,84.9,Kyron Jones,209.0,-9.3,-31.0
+GA TECH,GEORGIA,vs_safety_rank_4,Brett Seither,TE,50.4,53.9,70.5,79.0,JaCorey Thomas,207.0,-20.1,-25.1
+GA TECH,GEORGIA,vs_safety_rank_5,Brett Seither,TE,50.4,53.9,66.8,63.9,Adrian Maddox,64.0,-16.4,-10.0
+GA TECH,GEORGIA,vs_safety_rank_6,Brett Seither,TE,50.4,53.9,66.0,69.3,Zion Branch,56.0,-15.6,-15.4
+GA TECH,GEORGIA,vs_defense_avg,Josh Beetham,TE,76.9,49.9,68.98,80.54,,,7.92,-30.64
+GA TECH,GEORGIA,vs_safety_rank_1,Josh Beetham,TE,76.9,49.9,75.8,84.3,KJ Bolden,392.0,1.1,-34.4
+GA TECH,GEORGIA,vs_safety_rank_2,Josh Beetham,TE,76.9,49.9,66.9,79.5,Joenel Aguero,357.0,10.0,-29.6
+GA TECH,GEORGIA,vs_safety_rank_3,Josh Beetham,TE,76.9,49.9,59.7,84.9,Kyron Jones,209.0,17.2,-35.0
+GA TECH,GEORGIA,vs_safety_rank_4,Josh Beetham,TE,76.9,49.9,70.5,79.0,JaCorey Thomas,207.0,6.4,-29.1
+GA TECH,GEORGIA,vs_safety_rank_5,Josh Beetham,TE,76.9,49.9,66.8,63.9,Adrian Maddox,64.0,10.1,-14.0
+GA TECH,GEORGIA,vs_safety_rank_6,Josh Beetham,TE,76.9,49.9,66.0,69.3,Zion Branch,56.0,10.9,-19.4
+GA TECH,GEORGIA,vs_defense_avg,J.T. Byrne,TE,54.2,50.4,68.98,80.54,,,-14.78,-30.14
+GA TECH,GEORGIA,vs_safety_rank_1,J.T. Byrne,TE,54.2,50.4,75.8,84.3,KJ Bolden,392.0,-21.6,-33.9
+GA TECH,GEORGIA,vs_safety_rank_2,J.T. Byrne,TE,54.2,50.4,66.9,79.5,Joenel Aguero,357.0,-12.7,-29.1
+GA TECH,GEORGIA,vs_safety_rank_3,J.T. Byrne,TE,54.2,50.4,59.7,84.9,Kyron Jones,209.0,-5.5,-34.5
+GA TECH,GEORGIA,vs_safety_rank_4,J.T. Byrne,TE,54.2,50.4,70.5,79.0,JaCorey Thomas,207.0,-16.3,-28.6
+GA TECH,GEORGIA,vs_safety_rank_5,J.T. Byrne,TE,54.2,50.4,66.8,63.9,Adrian Maddox,64.0,-12.6,-13.5
+GA TECH,GEORGIA,vs_safety_rank_6,J.T. Byrne,TE,54.2,50.4,66.0,69.3,Zion Branch,56.0,-11.8,-18.9
+GA TECH,PITTSBURGH,vs_defense_avg,Luke Harpring,TE,70.4,56.4,70.27,70.18,,,0.13,-13.78
+GA TECH,PITTSBURGH,vs_safety_rank_1,Luke Harpring,TE,70.4,56.4,53.3,56.8,Javon McIntyre,339.0,17.1,-0.4
+GA TECH,PITTSBURGH,vs_safety_rank_2,Luke Harpring,TE,70.4,56.4,88.3,83.0,Cruce Brookins,334.0,-17.9,-26.6
+GA TECH,PITTSBURGH,vs_safety_rank_3,Luke Harpring,TE,70.4,56.4,69.7,70.9,Kavir Bains-Marquez,291.0,0.7,-14.5
+GA TECH,PITTSBURGH,vs_safety_rank_4,Luke Harpring,TE,70.4,56.4,68.7,70.9,Josh Guerrier,64.0,1.7,-14.5
+GA TECH,PITTSBURGH,vs_defense_avg,Brett Seither,TE,50.4,53.9,70.27,70.18,,,-19.87,-16.28
+GA TECH,PITTSBURGH,vs_safety_rank_1,Brett Seither,TE,50.4,53.9,53.3,56.8,Javon McIntyre,339.0,-2.9,-2.9
+GA TECH,PITTSBURGH,vs_safety_rank_2,Brett Seither,TE,50.4,53.9,88.3,83.0,Cruce Brookins,334.0,-37.9,-29.1
+GA TECH,PITTSBURGH,vs_safety_rank_3,Brett Seither,TE,50.4,53.9,69.7,70.9,Kavir Bains-Marquez,291.0,-19.3,-17.0
+GA TECH,PITTSBURGH,vs_safety_rank_4,Brett Seither,TE,50.4,53.9,68.7,70.9,Josh Guerrier,64.0,-18.3,-17.0
+GA TECH,PITTSBURGH,vs_defense_avg,Josh Beetham,TE,76.9,49.9,70.27,70.18,,,6.63,-20.28
+GA TECH,PITTSBURGH,vs_safety_rank_1,Josh Beetham,TE,76.9,49.9,53.3,56.8,Javon McIntyre,339.0,23.6,-6.9
+GA TECH,PITTSBURGH,vs_safety_rank_2,Josh Beetham,TE,76.9,49.9,88.3,83.0,Cruce Brookins,334.0,-11.4,-33.1
+GA TECH,PITTSBURGH,vs_safety_rank_3,Josh Beetham,TE,76.9,49.9,69.7,70.9,Kavir Bains-Marquez,291.0,7.2,-21.0
+GA TECH,PITTSBURGH,vs_safety_rank_4,Josh Beetham,TE,76.9,49.9,68.7,70.9,Josh Guerrier,64.0,8.2,-21.0
+GA TECH,PITTSBURGH,vs_defense_avg,J.T. Byrne,TE,54.2,50.4,70.27,70.18,,,-16.07,-19.78
+GA TECH,PITTSBURGH,vs_safety_rank_1,J.T. Byrne,TE,54.2,50.4,53.3,56.8,Javon McIntyre,339.0,0.9,-6.4
+GA TECH,PITTSBURGH,vs_safety_rank_2,J.T. Byrne,TE,54.2,50.4,88.3,83.0,Cruce Brookins,334.0,-34.1,-32.6
+GA TECH,PITTSBURGH,vs_safety_rank_3,J.T. Byrne,TE,54.2,50.4,69.7,70.9,Kavir Bains-Marquez,291.0,-15.5,-20.5
+GA TECH,PITTSBURGH,vs_safety_rank_4,J.T. Byrne,TE,54.2,50.4,68.7,70.9,Josh Guerrier,64.0,-14.5,-20.5
+GA TECH,SYRACUSE,vs_defense_avg,Luke Harpring,TE,70.4,56.4,63.89,62.67,,,6.51,-6.27
+GA TECH,SYRACUSE,vs_safety_rank_1,Luke Harpring,TE,70.4,56.4,56.5,60.3,Braheem Long Jr.,308.0,13.9,-3.9
+GA TECH,SYRACUSE,vs_safety_rank_2,Luke Harpring,TE,70.4,56.4,68.0,81.7,Duce Chestnut,302.0,2.4,-25.3
+GA TECH,SYRACUSE,vs_safety_rank_3,Luke Harpring,TE,70.4,56.4,70.5,54.1,Cornell Perry,272.0,-0.1,2.3
+GA TECH,SYRACUSE,vs_safety_rank_4,Luke Harpring,TE,70.4,56.4,66.0,51.0,Devin Grant,225.0,4.4,5.4
+GA TECH,SYRACUSE,vs_safety_rank_5,Luke Harpring,TE,70.4,56.4,56.5,62.3,Berry Buxton III,168.0,13.9,-5.9
+GA TECH,SYRACUSE,vs_defense_avg,Brett Seither,TE,50.4,53.9,63.89,62.67,,,-13.49,-8.77
+GA TECH,SYRACUSE,vs_safety_rank_1,Brett Seither,TE,50.4,53.9,56.5,60.3,Braheem Long Jr.,308.0,-6.1,-6.4
+GA TECH,SYRACUSE,vs_safety_rank_2,Brett Seither,TE,50.4,53.9,68.0,81.7,Duce Chestnut,302.0,-17.6,-27.8
+GA TECH,SYRACUSE,vs_safety_rank_3,Brett Seither,TE,50.4,53.9,70.5,54.1,Cornell Perry,272.0,-20.1,-0.2
+GA TECH,SYRACUSE,vs_safety_rank_4,Brett Seither,TE,50.4,53.9,66.0,51.0,Devin Grant,225.0,-15.6,2.9
+GA TECH,SYRACUSE,vs_safety_rank_5,Brett Seither,TE,50.4,53.9,56.5,62.3,Berry Buxton III,168.0,-6.1,-8.4
+GA TECH,SYRACUSE,vs_defense_avg,Josh Beetham,TE,76.9,49.9,63.89,62.67,,,13.01,-12.77
+GA TECH,SYRACUSE,vs_safety_rank_1,Josh Beetham,TE,76.9,49.9,56.5,60.3,Braheem Long Jr.,308.0,20.4,-10.4
+GA TECH,SYRACUSE,vs_safety_rank_2,Josh Beetham,TE,76.9,49.9,68.0,81.7,Duce Chestnut,302.0,8.9,-31.8
+GA TECH,SYRACUSE,vs_safety_rank_3,Josh Beetham,TE,76.9,49.9,70.5,54.1,Cornell Perry,272.0,6.4,-4.2
+GA TECH,SYRACUSE,vs_safety_rank_4,Josh Beetham,TE,76.9,49.9,66.0,51.0,Devin Grant,225.0,10.9,-1.1
+GA TECH,SYRACUSE,vs_safety_rank_5,Josh Beetham,TE,76.9,49.9,56.5,62.3,Berry Buxton III,168.0,20.4,-12.4
+GA TECH,SYRACUSE,vs_defense_avg,J.T. Byrne,TE,54.2,50.4,63.89,62.67,,,-9.69,-12.27
+GA TECH,SYRACUSE,vs_safety_rank_1,J.T. Byrne,TE,54.2,50.4,56.5,60.3,Braheem Long Jr.,308.0,-2.3,-9.9
+GA TECH,SYRACUSE,vs_safety_rank_2,J.T. Byrne,TE,54.2,50.4,68.0,81.7,Duce Chestnut,302.0,-13.8,-31.3
+GA TECH,SYRACUSE,vs_safety_rank_3,J.T. Byrne,TE,54.2,50.4,70.5,54.1,Cornell Perry,272.0,-16.3,-3.7
+GA TECH,SYRACUSE,vs_safety_rank_4,J.T. Byrne,TE,54.2,50.4,66.0,51.0,Devin Grant,225.0,-11.8,-0.6
+GA TECH,SYRACUSE,vs_safety_rank_5,J.T. Byrne,TE,54.2,50.4,56.5,62.3,Berry Buxton III,168.0,-2.3,-11.9
