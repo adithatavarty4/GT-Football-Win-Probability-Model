@@ -959,16 +959,16 @@ def main() -> int:
 
     m = sub.add_parser("market-plot", help="Create diagrams comparing model probabilities vs market implied probabilities")
     m.add_argument("--year", type=int, default=None, help="Year label for output filenames/titles (optional)")
-    m.add_argument("--csv", type=Path, default=Path("game_by_game_comparison_table.csv"), help="Input CSV (default: game_by_game_comparison_table.csv)")
+    m.add_argument("--csv", type=Path, default=Path("web") / "game_by_game_comparison_table.csv", help="Input CSV (default: web/game_by_game_comparison_table.csv)")
     m.add_argument("--out-dir", type=Path, default=Path("reports") / "market", help="Output directory for images")
 
-    mf = sub.add_parser("market-vs-fpi", help="Bar chart comparing market win% vs ESPN FPI win% (GT)")
+    mf = sub.add_parser("market-vs-fpi", help="Bar chart comparing market win%% vs ESPN FPI win%% (GT)")
     mf.add_argument("--year", type=int, default=None)
     mf.add_argument("--market", type=Path, default=Path("data_processed") / "market_probs_2025_manual.csv")
     mf.add_argument("--fpi", type=Path, default=Path("data_processed") / "fpi_probs_2025_espn.csv")
     mf.add_argument("--out-dir", type=Path, default=Path("reports") / "market_manual")
 
-    mvf = sub.add_parser("model-vs-fpi", help="Bar chart comparing model win% vs ESPN FPI win% (GT)")
+    mvf = sub.add_parser("model-vs-fpi", help="Bar chart comparing model win%% vs ESPN FPI win%% (GT)")
     mvf.add_argument("--year", type=int, required=True)
     mvf.add_argument("--backtest", type=Path, default=None, help="Backtest CSV (default: reports/<year>/backtest_<year>.csv)")
     mvf.add_argument("--fpi", type=Path, default=Path("data_processed") / "fpi_probs_2025_espn.csv")

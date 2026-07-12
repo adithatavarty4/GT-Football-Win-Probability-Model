@@ -4,10 +4,11 @@ Train a Georgia Tech win-probability model from CollegeFootballData (CFBD) API d
 
 ## What it does
 
-- Builds a supervised dataset from CFBD game results + pregame features
+- Builds a supervised dataset from CFBD game results + pregame features, either for one team's schedule or pooled across every FBS team
 - Trains a logistic regression win-probability model with recency weighting
 - Calibrates predicted probabilities (auto-selects sigmoid vs isotonic by validation Brier score)
 - Predicts a single matchup or an entire season schedule
+- Evaluates with a rolling walk-forward backtest across many seasons, not just one fixed test year
 - (Optional) Generates reports/plots and compares vs ESPN FPI
 
 ## Why this matters
@@ -31,17 +32,27 @@ CFBD API → feature engineering → dataset → logistic regression → calibra
 ```mermaid
 flowchart TD
   A[CFBD API\n/games, /talent, /player/returning,\n/recruiting/teams, /ratings/elo] --> B[CFBD cache\n data_raw/cfbd_cache]
-  B --> C[Dataset builder\n winprob.py build-dataset]
+  B --> C[Dataset builder\n scripts/winprob.py build-dataset]
   C --> D[data_processed/model_dataset.csv]
-  D --> E[Trainer\n winprob.py train]
+  D --> E[Trainer\n scripts/winprob.py train]
   E --> F[Model artifacts\n models/*.joblib + metrics.json]
-  F --> G[Predictor\n winprob.py predict / predict-season]
+  F --> G[Predictor\n scripts/winprob.py predict / predict-season]
   G --> H[data_processed/predictions_<year>.csv]
-  H --> I[Reports\n analysis_report.py backtest]
+  H --> I[Reports\n scripts/analysis_report.py backtest]
   I --> J[Plots + tables\n reports/<year>/]
-  H --> K[FPI compare\n analysis_report.py model-vs-fpi]
+  H --> K[FPI compare\n scripts/analysis_report.py model-vs-fpi]
   K --> L[Plot\n reports/model_fpi/]
 ```
+
+## Code layout
+
+- `scripts/winprob.py` - thin CLI entry point (argparse only); this is what you run
+- `src/winprob_lib/` - the implementation, split by concern:
+  - `cfbd_client.py` - `CFBDClient` (caching HTTP client) and team-name resolution
+  - `features.py` - dataset builders (`build_dataset`, `build_dataset_all_fbs`) and the pregame feature-engineering functions they share
+  - `train.py` - model fitting, calibration selection, `train_model`, `walk_forward_eval`
+  - `predict.py` - live feature fetch + prediction for a single matchup or a season schedule
+- `scripts/analysis_report.py`, `scripts/market_compare.py` - downstream reporting/backtesting, unchanged; `market_compare.py` imports `CFBDClient`/`resolve_team_name` from `scripts/winprob.py`, which re-exports them from `winprob_lib`
 
 ## Features
 
@@ -95,9 +106,9 @@ Example `predict` output (fields may vary slightly depending on model target/cal
 
 2) Build the dataset and train:
 
-`python .\winprob.py build-dataset --from-year 2014 --to-year 2025 --team "Georgia Tech"`
+`python .\scripts\winprob.py build-dataset --from-year 2014 --to-year 2025 --team "Georgia Tech"`
 
-`python .\winprob.py train`
+`python .\scripts\winprob.py train`
 
 Outputs:
 
@@ -107,26 +118,76 @@ Outputs:
 - `models/feature_columns.json`
 - `models/metrics.json`
 
+**Pooled training (recommended):** one team's history is only ~150 games across 12 seasons - too
+few to fit or calibrate a stable model. `--scope all-fbs` pools every FBS team's games (both
+home/away perspective) into one team-agnostic training set, using the exact same relative
+team-strength-diff features, so it's still a Georgia Tech predictor - just trained on ~20,000
+games instead of ~150:
+
+`python .\scripts\winprob.py build-dataset --scope all-fbs --from-year 2014 --to-year 2025 --out data_processed\model_dataset_all_fbs.csv`
+
+`python .\scripts\winprob.py train --dataset data_processed\model_dataset_all_fbs.csv`
+
+This is a bigger download than `--scope team` but still cheap: `/games` is fetched once per year
+league-wide instead of once per team, so it's fewer CFBD requests, not more (roughly a minute for
+2014-2025 uncached).
+
 3) Predict a matchup:
 
-`python .\winprob.py predict --year 2025 --week 1 --opponent "Florida State" --home away`
+`python .\scripts\winprob.py predict --year 2025 --week 1 --opponent "Florida State" --home away`
 
 `predict` prints `p_win` plus diagnostics like `p_win_raw` and the selected `calibrator`.
 
 ## Results (example run)
 
-The repo includes example trained artifacts under `models/`. For that run:
+The repo includes example trained artifacts under `models/`, trained on the pooled all-FBS
+dataset (see Quickstart). For that run:
 
-- Train: 2014-2022, Validation: 2023-2024, Test: 2025
+- Train: 2014-2022, Validation: 2023-2024, Test: 2025 (league-wide, ~17,000 train rows)
 - Recency weighting half-life: 3.0 years
-- Calibration selected: sigmoid (logit-space)
-- Test (calibrated): accuracy 0.833, Brier 0.174, log loss 0.526
+- Calibration selected: isotonic
+- Test (league-wide, calibrated): accuracy 0.730, Brier 0.174, log loss 0.549
+- Test (league-wide, raw/uncalibrated): accuracy 0.733, Brier 0.173, log loss 0.512
 
 Full details: `models/metrics.json`.
 
+Note the raw (uncalibrated) log loss is actually slightly *better* than the calibrated one here -
+with ~17,000 training rows, logistic regression's own output is already well-calibrated (test ECE
+0.016), so the auto-selected calibrator (chosen by validation Brier score alone) buys almost
+nothing and can cost a bit of log loss. Worth a second look if you're optimizing log loss
+specifically; `--calibration none` skips it entirely.
+
 Interpretation: Brier/log loss reward well-calibrated probabilities, so improvements here are a stronger signal than raw pick accuracy alone.
 
-Note: the year split is currently fixed in code inside `winprob.py` (train=2014-2022, val=2023-2024, test=2025).
+Note: the deployed model's year split is still fixed in code inside `scripts/winprob.py`
+(train=2014-2022, val=2023-2024, test=2025) - see **Walk-forward evaluation** below for a
+methodology that doesn't depend on one fixed test year.
+
+## Walk-forward evaluation
+
+A single fixed test year is 12-13 Georgia Tech games - too few and too noisy to trust a Brier or
+log-loss number on its own. `scripts/winprob.py walkforward` retrains per season instead: for
+test year Y it trains on years < Y-1, calibrates on year Y-1, predicts year Y, then pools every
+year's held-out predictions into one set of metrics.
+
+`python .\scripts\winprob.py walkforward --dataset data_processed\model_dataset.csv --start-test-year 2019`
+
+Rolling 2019-2025 (85 held-out Georgia Tech games across 7 seasons), comparing a GT-only model
+against the pooled all-FBS model (evaluated on GT's games specifically, via `--eval-team`):
+
+| | Accuracy (raw) | Brier (raw) | Accuracy (calibrated) | Brier (calibrated) |
+|---|---|---|---|---|
+| GT-only training | 0.494 | 0.311 | 0.565 | 0.273 |
+| Pooled all-FBS training | 0.635 | 0.224 | 0.647 | 0.216 |
+
+`python .\scripts\winprob.py walkforward --dataset data_processed\model_dataset_all_fbs.csv --eval-team "Georgia Tech" --start-test-year 2019`
+
+Pooling clearly helps here - unsurprising, since ~150 rows isn't enough for a logistic regression
+to find stable weights, let alone calibrate on top of them. One caveat worth flagging: calibrated
+log loss was *worse* than raw log loss in both rows above (isotonic calibration fit on a single
+season - or even the whole league in a season - can still snap to a hard 0/1 in some probability
+range, which is catastrophic for log loss the one time it's wrong). Selecting the calibrator by
+validation Brier alone doesn't protect against that; see Future improvements.
 
 ## Model vs ESPN FPI (win %)
 
@@ -138,11 +199,11 @@ To reproduce:
 
 1) Generate a backtest CSV for the season:
 
-`python .\analysis_report.py backtest --year 2025`
+`python .\scripts\analysis_report.py backtest --year 2025`
 
 2) Generate the model-vs-FPI plot:
 
-`python .\analysis_report.py model-vs-fpi --year 2025 --fpi .\data_processed\fpi_probs_2025_espn.csv`
+`python .\scripts\analysis_report.py model-vs-fpi --year 2025 --fpi .\data_processed\fpi_probs_2025_espn.csv`
 
 The FPI inputs live in `data_processed/fpi_probs_2025_espn.csv` (GT win% by week). That file is a manually collected snapshot; update it if you want a different year/team/source.
 
@@ -150,7 +211,7 @@ The FPI inputs live in `data_processed/fpi_probs_2025_espn.csv` (GT win% by week
 
 This pulls the CFBD schedule (`/games`) and writes a CSV of per-game predictions:
 
-`python .\winprob.py predict-season --year 2026 --team "Georgia Tech"`
+`python .\scripts\winprob.py predict-season --year 2026 --team "Georgia Tech"`
 
 Default output:
 
@@ -164,17 +225,17 @@ Default output:
 
 ## Limitations
 
-- The train/val/test split is currently hard-coded (see note above), so it’s not a full rolling backtest yet.
+- The *deployed* model's train/val/test split is still hard-coded (see note above); `walkforward` avoids this for evaluation, but `train` itself always uses one fixed split.
 - CFBD endpoints can change or be missing depending on access/plan; the pipeline drops features that are entirely missing.
-- Small sample sizes (single team, single season test) make metrics noisy; calibration can overfit when data is limited.
+- Calibration is selected by validation Brier score alone, which can pick a calibrator that quietly hurts log loss (see Walk-forward evaluation) - there's no safeguard against isotonic snapping to a hard 0/1 in a thin probability bin.
 - FPI inputs in this repo are a manual snapshot for 2025 and are not fetched automatically.
 - The model is pregame/team-level only (no in-game dynamics, injuries, weather, or play-by-play context).
 - Logistic regression is intentionally simple and may miss nonlinear interactions.
 
 ## Future improvements
 
-- Add a rolling / walk-forward evaluation mode across many seasons
+- Make the deployed model's `train` split walk-forward too (right now only evaluation is rolling; the shipped artifact still comes from one fixed split)
+- Select the calibrator by a blend of Brier and log loss (or clip isotonic away from exact 0/1) instead of Brier alone
 - Add hyperparameter tuning and richer models (GBMs) while keeping calibration
-- Support any team as a first-class target (not just GT) and add multi-team training
 - Improve opponent strength features and injury/availability features (if data sources are available)
 - Automate FPI ingestion (or support multiple external baselines) with clear provenance
