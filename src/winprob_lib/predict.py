@@ -24,7 +24,7 @@ def _fetch_matchup_features(
     home: str,
 ) -> pd.DataFrame:
     client = CFBDClient()
-    class_map = _team_classification_map(client, use_cache=True)
+    class_map = _team_classification_map(client, year=year, use_cache=True)
 
     is_neutral = 1 if home.lower() == "neutral" else 0
     is_home = 1 if home.lower() == "home" else 0

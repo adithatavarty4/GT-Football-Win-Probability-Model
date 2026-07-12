@@ -189,6 +189,26 @@ season - or even the whole league in a season - can still snap to a hard 0/1 in 
 range, which is catastrophic for log loss the one time it's wrong). Selecting the calibrator by
 validation Brier alone doesn't protect against that; see Future improvements.
 
+### Does older history actually help?
+
+Recency weighting (3-year half-life) already discounts old seasons, but college football had real
+regime shifts in this window - the transfer portal (~2018+) changed how rosters get built, NIL
+(2021+), and heavy conference realignment. To check whether the decay alone was enough, walk-forward
+was run twice over the identical 63 held-out GT games (2021-2025), varying only how far back the
+training pool goes:
+
+| Training pool | Accuracy (calibrated) | Brier (calibrated) | Log loss (calibrated) | ECE |
+|---|---|---|---|---|
+| Full 2014-2025 | 0.619 | 0.216 | 0.606 | 0.147 |
+| 2018-2025 only | **0.651** | **0.211** | **0.596** | **0.115** |
+
+The 2018+-only pool wins on every metric despite having roughly a third to half as many training
+rows per fold. That suggests the exponential decay isn't fully compensating for the portal-era
+shift - dropping the pre-2018 data outright currently beats keeping it with decay. Not yet acted
+on (would mean changing the default `--from-year` for the deployed model), since 63 games is still
+a modest sample to hang a permanent decision on - but it's a real, consistent signal worth more
+than one run's worth of trust.
+
 ## Model vs ESPN FPI (win %)
 
 This repo includes a comparison plot between this model's win probabilities and ESPN FPI win probabilities for each 2025 game:
@@ -222,6 +242,7 @@ Default output:
 - CFBD responses are cached under `data_raw/cfbd_cache/` to speed up repeated runs.
 - CFBD requires an API key and may enforce rate limits; caching helps reduce repeated calls.
 - This is a personal/educational model and is not affiliated with CFBD or Georgia Tech.
+- Team FBS/FCS classification is fetched per-year (`/teams?year=Y`), not as a single present-day snapshot - several teams moved FCS->FBS during 2014-2025 (e.g. Jacksonville State in 2023), and a present-day-only lookup would mislabel their older games.
 
 ## Limitations
 

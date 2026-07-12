@@ -100,11 +100,15 @@ def resolve_team_name(client: CFBDClient, team_input: str, *, use_cache: bool = 
     return resolved, candidate_schools
 
 
-def _team_classification_map(client: CFBDClient, *, use_cache: bool = True) -> dict[str, str]:
+def _team_classification_map(client: CFBDClient, *, year: int, use_cache: bool = True) -> dict[str, str]:
     """
-    Map CFBD `school` -> `classification` (fbs/fcs/...)
+    Map CFBD `school` -> `classification` (fbs/fcs/...) as of `year`.
+
+    Classification is year-scoped deliberately: several teams moved FCS -> FBS during
+    2014-2025 (e.g. Jacksonville State, FCS through 2022 and FBS from 2023). A single
+    present-day snapshot applied to all years would mislabel their older games.
     """
-    items = client.get("/teams", {}, use_cache=use_cache)
+    items = client.get("/teams", {"year": year}, use_cache=use_cache)
     if not isinstance(items, list):
         return {}
     out: dict[str, str] = {}

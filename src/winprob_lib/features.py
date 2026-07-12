@@ -255,7 +255,6 @@ def build_dataset(
     use_cache: bool = True,
 ) -> pd.DataFrame:
     client = CFBDClient()
-    class_map = _team_classification_map(client, use_cache=use_cache)
 
     original_team_input = team
     resolved_team, team_candidates = resolve_team_name(client, team, use_cache=use_cache)
@@ -275,6 +274,8 @@ def build_dataset(
     team_games_cache: dict[tuple[int, str, str], list[dict[str, Any]]] = {}
 
     for year in range(year_from, year_to + 1):
+        class_map = _team_classification_map(client, year=year, use_cache=use_cache)
+
         # Season-level features (constant across all games in a season).
         talent_by_team: dict[str, dict[str, Any]] = {}
         returning_by_team: dict[str, dict[str, Any]] = {}
@@ -562,7 +563,6 @@ def build_dataset_all_fbs(
     using the same floor-fallback constants as `build_dataset()`.
     """
     client = CFBDClient()
-    class_map = _team_classification_map(client, use_cache=use_cache)
 
     def _returning_total(v: dict[str, Any]) -> float | None:
         for key in ("total", "totalPpa", "total_ppa", "total_returning"):
@@ -575,6 +575,7 @@ def build_dataset_all_fbs(
     elo_cache: dict[tuple[int, int], dict[str, dict[str, Any]]] = {}
 
     for year in range(year_from, year_to + 1):
+        class_map = _team_classification_map(client, year=year, use_cache=use_cache)
         try:
             talent_by_team = _index_by_team(client.get("/talent", {"year": year}, use_cache=use_cache), team_field="school")
         except Exception:
