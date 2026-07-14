@@ -1,0 +1,151 @@
+{
+  "dataset": "data_processed\\model_dataset_all_fbs.csv",
+  "n_games": 85,
+  "n_folds": 7,
+  "start_test_year": 2019,
+  "end_test_year": 2025,
+  "raw": {
+    "accuracy": 0.5294117647058824,
+    "brier": 0.24714415085668745,
+    "log_loss": 0.6865589177806419,
+    "ece_10bin": 0.09779172170919394,
+    "bins_10": [
+      {
+        "bin_lo": 0.4,
+        "bin_hi": 0.5,
+        "n": 38.0,
+        "mean_pred": 0.423321221515486,
+        "empirical_winrate": 0.39473684210526316
+      },
+      {
+        "bin_lo": 0.5,
+        "bin_hi": 0.6000000000000001,
+        "n": 41.0,
+        "mean_pred": 0.5767089711968798,
+        "empirical_winrate": 0.4146341463414634
+      },
+      {
+        "bin_lo": 0.9,
+        "bin_hi": 1.0,
+        "n": 6.0,
+        "mean_pred": 0.930170351436824,
+        "empirical_winrate": 0.8333333333333334
+      }
+    ]
+  },
+  "calibrated": {
+    "accuracy": 0.5294117647058824,
+    "brier": 0.24710294389946236,
+    "log_loss": 0.6905051208522933,
+    "ece_10bin": 0.09911767280185371,
+    "bins_10": [
+      {
+        "bin_lo": 0.4,
+        "bin_hi": 0.5,
+        "n": 38.0,
+        "mean_pred": 0.4198086168180665,
+        "empirical_winrate": 0.39473684210526316
+      },
+      {
+        "bin_lo": 0.5,
+        "bin_hi": 0.6000000000000001,
+        "n": 41.0,
+        "mean_pred": 0.5822657384167941,
+        "empirical_winrate": 0.4146341463414634
+      },
+      {
+        "bin_lo": 0.9,
+        "bin_hi": 1.0,
+        "n": 6.0,
+        "mean_pred": 0.9332299123304134,
+        "empirical_winrate": 0.8333333333333334
+      }
+    ]
+  },
+  "folds": [
+    {
+      "test_year": 2019,
+      "n_train": 6546,
+      "n_val": 1656,
+      "n_test": 12,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.2296465727897149,
+        "isotonic": 0.22912056747201304,
+        "sigmoid_logit": 0.22922290917246677
+      }
+    },
+    {
+      "test_year": 2020,
+      "n_train": 8202,
+      "n_val": 1662,
+      "n_test": 10,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.2271689450029072,
+        "isotonic": 0.2260809904488291,
+        "sigmoid_logit": 0.2268245099668556
+      }
+    },
+    {
+      "test_year": 2021,
+      "n_train": 9864,
+      "n_val": 1102,
+      "n_test": 12,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.23986342124170137,
+        "isotonic": 0.23938964253041808,
+        "sigmoid_logit": 0.23967455562396403
+      }
+    },
+    {
+      "test_year": 2022,
+      "n_train": 10966,
+      "n_val": 1657,
+      "n_test": 12,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.2337057036323628,
+        "isotonic": 0.23311723253342023,
+        "sigmoid_logit": 0.23368289499555278
+      }
+    },
+    {
+      "test_year": 2023,
+      "n_train": 12623,
+      "n_val": 1672,
+      "n_test": 13,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.23097743099917517,
+        "isotonic": 0.23056264714304603,
+        "sigmoid_logit": 0.2309754720623383
+      }
+    },
+    {
+      "test_year": 2024,
+      "n_train": 14295,
+      "n_val": 1702,
+      "n_test": 13,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.22915487485378372,
+        "isotonic": 0.2290107961243594,
+        "sigmoid_logit": 0.2291301533970552
+      }
+    },
+    {
+      "test_year": 2025,
+      "n_train": 15997,
+      "n_val": 1717,
+      "n_test": 13,
+      "calibrator": "sigmoid_logit",
+      "val_brier": {
+        "raw": 0.22920004386913423,
+        "isotonic": 0.22830861202642816,
+        "sigmoid_logit": 0.22915176258514378
+      }
+    }
+  ]
+}

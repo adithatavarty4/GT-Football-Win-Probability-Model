@@ -5,158 +5,158 @@
   "start_test_year": 2019,
   "end_test_year": 2025,
   "raw": {
-    "accuracy": 0.7058823529411765,
-    "brier": 0.21753925271595187,
-    "log_loss": 0.6361006495935744,
-    "ece_10bin": 0.15703542389839759,
+    "accuracy": 0.6470588235294118,
+    "brier": 0.2188473699709148,
+    "log_loss": 0.6301839337303637,
+    "ece_10bin": 0.11198779812216744,
     "bins_10": [
       {
         "bin_lo": 0.0,
         "bin_hi": 0.1,
-        "n": 13.0,
-        "mean_pred": 0.05490865576005225,
-        "empirical_winrate": 0.15384615384615385
+        "n": 11.0,
+        "mean_pred": 0.053434476047036966,
+        "empirical_winrate": 0.18181818181818182
       },
       {
         "bin_lo": 0.1,
         "bin_hi": 0.2,
-        "n": 13.0,
-        "mean_pred": 0.1545525779946741,
-        "empirical_winrate": 0.46153846153846156
+        "n": 11.0,
+        "mean_pred": 0.15718726684944848,
+        "empirical_winrate": 0.18181818181818182
       },
       {
         "bin_lo": 0.2,
         "bin_hi": 0.30000000000000004,
-        "n": 7.0,
-        "mean_pred": 0.24700586193317703,
-        "empirical_winrate": 0.2857142857142857
+        "n": 15.0,
+        "mean_pred": 0.24092688655175393,
+        "empirical_winrate": 0.4
       },
       {
         "bin_lo": 0.30000000000000004,
         "bin_hi": 0.4,
-        "n": 10.0,
-        "mean_pred": 0.3548445737038845,
-        "empirical_winrate": 0.2
+        "n": 9.0,
+        "mean_pred": 0.33867049203177707,
+        "empirical_winrate": 0.5555555555555556
       },
       {
         "bin_lo": 0.4,
         "bin_hi": 0.5,
         "n": 12.0,
-        "mean_pred": 0.4548013791082041,
-        "empirical_winrate": 0.3333333333333333
+        "mean_pred": 0.4560180582247175,
+        "empirical_winrate": 0.4166666666666667
       },
       {
         "bin_lo": 0.5,
         "bin_hi": 0.6000000000000001,
         "n": 8.0,
-        "mean_pred": 0.5349579785382219,
-        "empirical_winrate": 0.75
+        "mean_pred": 0.5434005829852224,
+        "empirical_winrate": 0.5
       },
       {
         "bin_lo": 0.6000000000000001,
         "bin_hi": 0.7000000000000001,
-        "n": 6.0,
-        "mean_pred": 0.6427517399595626,
-        "empirical_winrate": 0.3333333333333333
+        "n": 7.0,
+        "mean_pred": 0.6394451934829627,
+        "empirical_winrate": 0.42857142857142855
       },
       {
         "bin_lo": 0.7000000000000001,
         "bin_hi": 0.8,
         "n": 5.0,
-        "mean_pred": 0.7682703016321424,
+        "mean_pred": 0.7523529133733576,
         "empirical_winrate": 0.8
       },
       {
         "bin_lo": 0.8,
         "bin_hi": 0.9,
-        "n": 5.0,
-        "mean_pred": 0.8405576747107245,
-        "empirical_winrate": 0.8
+        "n": 1.0,
+        "mean_pred": 0.8537320446728802,
+        "empirical_winrate": 1.0
       },
       {
         "bin_lo": 0.9,
         "bin_hi": 1.0,
         "n": 6.0,
-        "mean_pred": 0.9759503900876113,
+        "mean_pred": 0.9696164388980691,
         "empirical_winrate": 0.8333333333333334
       }
     ]
   },
   "calibrated": {
-    "accuracy": 0.6588235294117647,
-    "brier": 0.21630431354955057,
-    "log_loss": 0.6283589781462275,
-    "ece_10bin": 0.1303826197081722,
+    "accuracy": 0.6352941176470588,
+    "brier": 0.21122175243765018,
+    "log_loss": 0.9930648553484474,
+    "ece_10bin": 0.14860816763314427,
     "bins_10": [
       {
         "bin_lo": 0.0,
         "bin_hi": 0.1,
-        "n": 12.0,
-        "mean_pred": 0.029294056530081377,
-        "empirical_winrate": 0.08333333333333333
+        "n": 14.0,
+        "mean_pred": 0.04105739054209008,
+        "empirical_winrate": 0.14285714285714285
       },
       {
         "bin_lo": 0.1,
         "bin_hi": 0.2,
-        "n": 13.0,
-        "mean_pred": 0.1776857496704307,
-        "empirical_winrate": 0.5384615384615384
+        "n": 8.0,
+        "mean_pred": 0.17448932654071359,
+        "empirical_winrate": 0.0
       },
       {
         "bin_lo": 0.2,
         "bin_hi": 0.30000000000000004,
-        "n": 9.0,
-        "mean_pred": 0.26259985097197536,
-        "empirical_winrate": 0.2222222222222222
+        "n": 14.0,
+        "mean_pred": 0.2517588445920914,
+        "empirical_winrate": 0.5
       },
       {
         "bin_lo": 0.30000000000000004,
         "bin_hi": 0.4,
-        "n": 7.0,
-        "mean_pred": 0.36148447159748237,
-        "empirical_winrate": 0.14285714285714285
+        "n": 8.0,
+        "mean_pred": 0.3210395317538394,
+        "empirical_winrate": 0.5
       },
       {
         "bin_lo": 0.4,
         "bin_hi": 0.5,
-        "n": 16.0,
-        "mean_pred": 0.4629173883459011,
-        "empirical_winrate": 0.5
+        "n": 9.0,
+        "mean_pred": 0.45755675306199817,
+        "empirical_winrate": 0.5555555555555556
       },
       {
         "bin_lo": 0.5,
         "bin_hi": 0.6000000000000001,
-        "n": 7.0,
-        "mean_pred": 0.5187220187220187,
-        "empirical_winrate": 0.42857142857142855
+        "n": 13.0,
+        "mean_pred": 0.5207745735124187,
+        "empirical_winrate": 0.46153846153846156
       },
       {
         "bin_lo": 0.6000000000000001,
         "bin_hi": 0.7000000000000001,
-        "n": 3.0,
-        "mean_pred": 0.6560201316298877,
+        "n": 6.0,
+        "mean_pred": 0.6335589223448693,
         "empirical_winrate": 0.3333333333333333
       },
       {
         "bin_lo": 0.7000000000000001,
         "bin_hi": 0.8,
-        "n": 9.0,
-        "mean_pred": 0.7440054160608568,
-        "empirical_winrate": 0.7777777777777778
+        "n": 5.0,
+        "mean_pred": 0.7220673566687971,
+        "empirical_winrate": 0.8
       },
       {
         "bin_lo": 0.8,
         "bin_hi": 0.9,
         "n": 2.0,
-        "mean_pred": 0.8033145974541247,
-        "empirical_winrate": 0.5
+        "mean_pred": 0.8611111111111112,
+        "empirical_winrate": 1.0
       },
       {
         "bin_lo": 0.9,
         "bin_hi": 1.0,
-        "n": 7.0,
-        "mean_pred": 0.9638799109387345,
-        "empirical_winrate": 0.8571428571428571
+        "n": 6.0,
+        "mean_pred": 0.9637783292990573,
+        "empirical_winrate": 0.8333333333333334
       }
     ]
   },
@@ -168,9 +168,9 @@
       "n_test": 12,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.16348512991043354,
-        "isotonic": 0.15968143130248785,
-        "sigmoid_logit": 0.16347293882199868
+        "raw": 0.1684458305182893,
+        "isotonic": 0.16539147015842576,
+        "sigmoid_logit": 0.16836830556454346
       }
     },
     {
@@ -180,9 +180,9 @@
       "n_test": 10,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.16164912433429757,
-        "isotonic": 0.15857158773210148,
-        "sigmoid_logit": 0.16157395307661013
+        "raw": 0.16825686853504432,
+        "isotonic": 0.16274078977201195,
+        "sigmoid_logit": 0.16795592136595247
       }
     },
     {
@@ -192,9 +192,9 @@
       "n_test": 12,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.17959540787110756,
-        "isotonic": 0.1747001668491061,
-        "sigmoid_logit": 0.1794657766882282
+        "raw": 0.1839831817625656,
+        "isotonic": 0.17951695872291237,
+        "sigmoid_logit": 0.18392591794750357
       }
     },
     {
@@ -204,9 +204,9 @@
       "n_test": 12,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18409997587150448,
-        "isotonic": 0.17853412830222995,
-        "sigmoid_logit": 0.1828487331181526
+        "raw": 0.1819189789568211,
+        "isotonic": 0.17783090939745816,
+        "sigmoid_logit": 0.1817548677095171
       }
     },
     {
@@ -216,9 +216,9 @@
       "n_test": 13,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18572239155445838,
-        "isotonic": 0.1808595862974962,
-        "sigmoid_logit": 0.18471086554377908
+        "raw": 0.19090188449787332,
+        "isotonic": 0.18631769586878674,
+        "sigmoid_logit": 0.18982489460428356
       }
     },
     {
@@ -228,9 +228,9 @@
       "n_test": 13,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.1693243672119989,
-        "isotonic": 0.1655182601318684,
-        "sigmoid_logit": 0.16931408350770566
+        "raw": 0.17481043844420827,
+        "isotonic": 0.17001694720888666,
+        "sigmoid_logit": 0.17451468554817812
       }
     },
     {
@@ -240,9 +240,9 @@
       "n_test": 13,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18330407722622974,
-        "isotonic": 0.17863275778109905,
-        "sigmoid_logit": 0.18288910633641253
+        "raw": 0.18467930025289675,
+        "isotonic": 0.18061000296887322,
+        "sigmoid_logit": 0.18447369386989404
       }
     }
   ]

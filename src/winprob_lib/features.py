@@ -346,7 +346,7 @@ def build_dataset(
         try:
             talent_by_team = _index_by_team(
                 client.get("/talent", {"year": year}, use_cache=use_cache),
-                team_field="school",
+                team_field="team",
             )
         except Exception:
             talent_by_team = {}
@@ -497,7 +497,7 @@ def build_dataset(
 
             # Returning production fields vary by era/plan; prefer a robust "total" if present.
             def _returning_total(v: dict[str, Any]) -> float | None:
-                for key in ("total", "totalPpa", "total_ppa", "total_returning"):
+                for key in ("totalPPA", "total", "totalPpa", "total_ppa", "total_returning"):
                     out = _as_float(v.get(key))
                     if out is not None:
                         return out
@@ -638,7 +638,7 @@ def build_dataset_all_fbs(
     client = CFBDClient()
 
     def _returning_total(v: dict[str, Any]) -> float | None:
-        for key in ("total", "totalPpa", "total_ppa", "total_returning"):
+        for key in ("totalPPA", "total", "totalPpa", "total_ppa", "total_returning"):
             out = _as_float(v.get(key))
             if out is not None:
                 return out
@@ -650,7 +650,7 @@ def build_dataset_all_fbs(
     for year in range(year_from, year_to + 1):
         class_map = _team_classification_map(client, year=year, use_cache=use_cache)
         try:
-            talent_by_team = _index_by_team(client.get("/talent", {"year": year}, use_cache=use_cache), team_field="school")
+            talent_by_team = _index_by_team(client.get("/talent", {"year": year}, use_cache=use_cache), team_field="team")
         except Exception:
             talent_by_team = {}
         try:

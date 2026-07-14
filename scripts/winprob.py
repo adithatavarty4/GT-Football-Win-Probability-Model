@@ -16,7 +16,7 @@ if str(_SRC_DIR) not in sys.path:
 from winprob_lib.cfbd_client import CFBDClient, resolve_team_name  # noqa: F401
 from winprob_lib.features import build_dataset, build_dataset_all_fbs
 from winprob_lib.predict import _fetch_matchup_features, _load_model_bundle, _predict_pwin, predict_schedule
-from winprob_lib.train import train_model, walk_forward_eval
+from winprob_lib.train import ablation_study, compute_feature_importance, train_model, walk_forward_eval
 
 
 def main(argv: Iterable[str] | None = None) -> int:
@@ -81,6 +81,25 @@ def main(argv: Iterable[str] | None = None) -> int:
     )
     wf.add_argument("--out-dir", type=Path, default=Path("reports") / "walkforward")
 
+    fi = sub.add_parser(
+        "feature-importance",
+        help="Show standardized coefficient magnitudes for a trained model",
+    )
+    fi.add_argument("--model", type=Path, default=Path("models") / "gt_winprob_logreg.joblib")
+    fi.add_argument("--out", type=Path, default=None, help="Optional CSV output path")
+
+    ab = sub.add_parser(
+        "ablation",
+        help="Cumulative feature-group ablation: measure each feature group's marginal contribution via walk-forward eval",
+    )
+    ab.add_argument("--dataset", type=Path, default=Path("data_processed") / "model_dataset_all_fbs.csv")
+    ab.add_argument("--start-test-year", type=int, default=2019)
+    ab.add_argument("--end-test-year", type=int, default=None)
+    ab.add_argument("--half-life-years", type=float, default=3.0)
+    ab.add_argument("--calibration", choices=["auto", "isotonic", "sigmoid", "none"], default="auto")
+    ab.add_argument("--eval-team", type=str, default=None)
+    ab.add_argument("--out-dir", type=Path, default=Path("reports") / "ablation")
+
     args = p.parse_args(list(argv) if argv is not None else None)
 
     if args.cmd == "build-dataset":
@@ -110,7 +129,10 @@ def main(argv: Iterable[str] | None = None) -> int:
             target=args.target,
         )
         print(json.dumps(result["metrics"], indent=2))
-        print("Wrote models/gt_winprob_logreg.joblib and models/metrics.json")
+        if args.target == "margin":
+            print("Wrote models/gt_margin_ridge.joblib and models/metrics_margin.json")
+        else:
+            print("Wrote models/gt_winprob_logreg.joblib and models/metrics.json")
         return 0
 
     if args.cmd == "predict":
@@ -168,6 +190,37 @@ def main(argv: Iterable[str] | None = None) -> int:
             )
         )
         print(f"Wrote {args.out_dir / 'walkforward_predictions.csv'} and {args.out_dir / 'walkforward_metrics.json'}")
+        return 0
+
+    if args.cmd == "feature-importance":
+        df = compute_feature_importance(args.model)
+        print(df.to_string(index=False))
+        if args.out is not None:
+            args.out.parent.mkdir(parents=True, exist_ok=True)
+            df.to_csv(args.out, index=False)
+            print(f"Wrote {args.out}")
+        return 0
+
+    if args.cmd == "ablation":
+        summary = ablation_study(
+            args.dataset,
+            start_test_year=args.start_test_year,
+            end_test_year=args.end_test_year,
+            half_life_years=args.half_life_years,
+            calibration=args.calibration,
+            eval_team=args.eval_team,
+            out_dir=args.out_dir,
+        )
+        header = f"{'added_group':<22}{'n_games':>8}{'acc_raw':>9}{'brier_raw':>11}{'acc_cal':>9}{'brier_cal':>11}{'logloss_cal':>13}"
+        print(header)
+        for step in summary["steps"]:
+            print(
+                f"{step['added_group']:<22}{step['n_games']:>8}"
+                f"{step['raw']['accuracy']:>9.3f}{step['raw']['brier']:>11.4f}"
+                f"{step['calibrated']['accuracy']:>9.3f}{step['calibrated']['brier']:>11.4f}"
+                f"{step['calibrated']['log_loss']:>13.4f}"
+            )
+        print(f"Wrote {args.out_dir / 'ablation_summary.json'}")
         return 0
 
     raise RuntimeError(f"Unknown command: {args.cmd}")

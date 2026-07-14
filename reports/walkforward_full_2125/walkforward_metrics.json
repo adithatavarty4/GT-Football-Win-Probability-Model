@@ -1,161 +1,161 @@
 {
-  "dataset": "data_processed\\model_dataset_all_fbs_2018plus.csv",
+  "dataset": "data_processed\\model_dataset_all_fbs.csv",
   "n_games": 63,
   "n_folds": 5,
   "start_test_year": 2021,
   "end_test_year": 2025,
   "raw": {
     "accuracy": 0.6825396825396826,
-    "brier": 0.216926617411652,
-    "log_loss": 0.6236711495705861,
-    "ece_10bin": 0.17638444979719262,
+    "brier": 0.2189107916488157,
+    "log_loss": 0.6300400900342968,
+    "ece_10bin": 0.15250870226206042,
     "bins_10": [
       {
         "bin_lo": 0.0,
         "bin_hi": 0.1,
         "n": 9.0,
-        "mean_pred": 0.06087485192394899,
+        "mean_pred": 0.06214557792171078,
         "empirical_winrate": 0.2222222222222222
       },
       {
         "bin_lo": 0.1,
         "bin_hi": 0.2,
         "n": 11.0,
-        "mean_pred": 0.15585174771018975,
+        "mean_pred": 0.15175010957061205,
         "empirical_winrate": 0.45454545454545453
       },
       {
         "bin_lo": 0.2,
         "bin_hi": 0.30000000000000004,
-        "n": 3.0,
-        "mean_pred": 0.22055875981145912,
-        "empirical_winrate": 0.0
+        "n": 4.0,
+        "mean_pred": 0.24063293887413745,
+        "empirical_winrate": 0.25
       },
       {
         "bin_lo": 0.30000000000000004,
         "bin_hi": 0.4,
-        "n": 8.0,
-        "mean_pred": 0.35346922046947343,
-        "empirical_winrate": 0.25
+        "n": 6.0,
+        "mean_pred": 0.3514790286044455,
+        "empirical_winrate": 0.16666666666666666
       },
       {
         "bin_lo": 0.4,
         "bin_hi": 0.5,
-        "n": 5.0,
-        "mean_pred": 0.46290685397720815,
-        "empirical_winrate": 0.6
+        "n": 6.0,
+        "mean_pred": 0.46709215815603433,
+        "empirical_winrate": 0.5
       },
       {
         "bin_lo": 0.5,
         "bin_hi": 0.6000000000000001,
-        "n": 8.0,
-        "mean_pred": 0.5436126839108177,
-        "empirical_winrate": 0.75
+        "n": 7.0,
+        "mean_pred": 0.5357320611235429,
+        "empirical_winrate": 0.7142857142857143
       },
       {
         "bin_lo": 0.6000000000000001,
         "bin_hi": 0.7000000000000001,
-        "n": 5.0,
-        "mean_pred": 0.6515673275422873,
-        "empirical_winrate": 0.2
+        "n": 6.0,
+        "mean_pred": 0.6427517399595626,
+        "empirical_winrate": 0.3333333333333333
       },
       {
         "bin_lo": 0.7000000000000001,
         "bin_hi": 0.8,
         "n": 4.0,
-        "mean_pred": 0.7648007845607702,
+        "mean_pred": 0.7690805782029363,
         "empirical_winrate": 0.75
       },
       {
         "bin_lo": 0.8,
         "bin_hi": 0.9,
         "n": 5.0,
-        "mean_pred": 0.8332313303303455,
+        "mean_pred": 0.8405576747107245,
         "empirical_winrate": 0.8
       },
       {
         "bin_lo": 0.9,
         "bin_hi": 1.0,
         "n": 5.0,
-        "mean_pred": 0.9869455000546123,
+        "mean_pred": 0.9785353032739849,
         "empirical_winrate": 1.0
       }
     ]
   },
   "calibrated": {
     "accuracy": 0.6349206349206349,
-    "brier": 0.21353993625207052,
-    "log_loss": 0.6042441260257326,
-    "ece_10bin": 0.1432640162105972,
+    "brier": 0.2157324027483818,
+    "log_loss": 0.6123366381159381,
+    "ece_10bin": 0.14856050174287153,
     "bins_10": [
       {
         "bin_lo": 0.0,
         "bin_hi": 0.1,
-        "n": 9.0,
-        "mean_pred": 0.04380186560871919,
-        "empirical_winrate": 0.1111111111111111
+        "n": 8.0,
+        "mean_pred": 0.03913339248742975,
+        "empirical_winrate": 0.125
       },
       {
         "bin_lo": 0.1,
         "bin_hi": 0.2,
-        "n": 8.0,
-        "mean_pred": 0.18920506912442397,
-        "empirical_winrate": 0.625
+        "n": 11.0,
+        "mean_pred": 0.18795368211739608,
+        "empirical_winrate": 0.5454545454545454
       },
       {
         "bin_lo": 0.2,
         "bin_hi": 0.30000000000000004,
-        "n": 7.0,
-        "mean_pred": 0.24348409197172277,
-        "empirical_winrate": 0.2857142857142857
+        "n": 5.0,
+        "mean_pred": 0.2486898327596566,
+        "empirical_winrate": 0.2
       },
       {
         "bin_lo": 0.30000000000000004,
         "bin_hi": 0.4,
         "n": 5.0,
-        "mean_pred": 0.35873994656059305,
+        "mean_pred": 0.361758310034172,
         "empirical_winrate": 0.2
       },
       {
         "bin_lo": 0.4,
         "bin_hi": 0.5,
-        "n": 6.0,
-        "mean_pred": 0.4577551014179601,
-        "empirical_winrate": 0.6666666666666666
+        "n": 8.0,
+        "mean_pred": 0.47180025127569797,
+        "empirical_winrate": 0.625
       },
       {
         "bin_lo": 0.5,
         "bin_hi": 0.6000000000000001,
-        "n": 11.0,
-        "mean_pred": 0.5234589023608739,
-        "empirical_winrate": 0.45454545454545453
+        "n": 7.0,
+        "mean_pred": 0.5187220187220187,
+        "empirical_winrate": 0.42857142857142855
       },
       {
         "bin_lo": 0.6000000000000001,
         "bin_hi": 0.7000000000000001,
-        "n": 1.0,
-        "mean_pred": 0.6190476190476191,
-        "empirical_winrate": 0.0
+        "n": 3.0,
+        "mean_pred": 0.6560201316298877,
+        "empirical_winrate": 0.3333333333333333
       },
       {
         "bin_lo": 0.7000000000000001,
         "bin_hi": 0.8,
-        "n": 9.0,
-        "mean_pred": 0.7545166589741458,
-        "empirical_winrate": 0.7777777777777778
+        "n": 8.0,
+        "mean_pred": 0.7460970021593729,
+        "empirical_winrate": 0.75
       },
       {
         "bin_lo": 0.8,
         "bin_hi": 0.9,
-        "n": 1.0,
-        "mean_pred": 0.8088888888888889,
-        "empirical_winrate": 0.0
+        "n": 2.0,
+        "mean_pred": 0.8033145974541247,
+        "empirical_winrate": 0.5
       },
       {
         "bin_lo": 0.9,
         "bin_hi": 1.0,
         "n": 6.0,
-        "mean_pred": 0.9674374364817441,
+        "mean_pred": 0.9624895257248198,
         "empirical_winrate": 1.0
       }
     ]
@@ -163,62 +163,62 @@
   "folds": [
     {
       "test_year": 2021,
-      "n_train": 3318,
+      "n_train": 9864,
       "n_val": 1102,
       "n_test": 12,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18451418031628042,
-        "isotonic": 0.17955812730828938,
-        "sigmoid_logit": 0.1835238924195816
+        "raw": 0.17959540787110756,
+        "isotonic": 0.1747001668491061,
+        "sigmoid_logit": 0.1794657766882282
       }
     },
     {
       "test_year": 2022,
-      "n_train": 4420,
+      "n_train": 10966,
       "n_val": 1657,
       "n_test": 12,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18387845894926202,
-        "isotonic": 0.1783498103752663,
-        "sigmoid_logit": 0.1826331368721028
+        "raw": 0.18409997587150448,
+        "isotonic": 0.17853412830222995,
+        "sigmoid_logit": 0.1828487331181526
       }
     },
     {
       "test_year": 2023,
-      "n_train": 6077,
+      "n_train": 12623,
       "n_val": 1672,
       "n_test": 13,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18592352615006025,
-        "isotonic": 0.18091817308682032,
-        "sigmoid_logit": 0.18500071809679072
+        "raw": 0.18572239155445838,
+        "isotonic": 0.1808595862974962,
+        "sigmoid_logit": 0.18471086554377908
       }
     },
     {
       "test_year": 2024,
-      "n_train": 7749,
+      "n_train": 14295,
       "n_val": 1702,
       "n_test": 13,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.16926465608322372,
-        "isotonic": 0.16536027438472004,
-        "sigmoid_logit": 0.1692066774629127
+        "raw": 0.1693243672119989,
+        "isotonic": 0.1655182601318684,
+        "sigmoid_logit": 0.16931408350770566
       }
     },
     {
       "test_year": 2025,
-      "n_train": 9451,
+      "n_train": 15997,
       "n_val": 1717,
       "n_test": 13,
       "calibrator": "isotonic",
       "val_brier": {
-        "raw": 0.18345845138900682,
-        "isotonic": 0.17915195263491793,
-        "sigmoid_logit": 0.18305659411400013
+        "raw": 0.18330407722622974,
+        "isotonic": 0.17863275778109905,
+        "sigmoid_logit": 0.18288910633641253
       }
     }
   ]

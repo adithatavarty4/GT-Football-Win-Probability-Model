@@ -39,6 +39,33 @@ WIN_MODEL_FEATURE_COLS = [
     "recruit_rank_diff",
 ]
 
+# Cumulative feature groups for ablation studies (see ablation_study() below). Must
+# partition WIN_MODEL_FEATURE_COLS exactly - checked at runtime in ablation_study().
+FEATURE_GROUPS: list[tuple[str, list[str]]] = [
+    ("context", ["is_home", "neutral_site", "opp_is_fbs"]),
+    ("elo", ["elo_diff"]),
+    (
+        "form",
+        [
+            "win_pct_diff",
+            "point_diff_pg_diff",
+            "points_for_pg_diff",
+            "points_against_pg_diff",
+            "w_win_pct_diff",
+            "w_point_diff_pg_diff",
+            "w_points_for_pg_diff",
+            "w_points_against_pg_diff",
+            "opp_elo_avg_diff",
+            "w_opp_elo_avg_diff",
+            "sos_point_diff_pg_diff",
+            "w_sos_point_diff_pg_diff",
+        ],
+    ),
+    ("talent", ["talent_diff"]),
+    ("returning_production", ["returning_diff"]),
+    ("recruiting", ["recruit_points_diff", "recruit_rank_diff"]),
+]
+
 
 def _calibration_bins(p: np.ndarray, y: np.ndarray, *, n_bins: int = 10) -> list[dict[str, float]]:
     edges = np.linspace(0.0, 1.0, n_bins + 1)
@@ -113,6 +140,35 @@ def _apply_calibrator(p_raw: float, calibrator: Any | None) -> tuple[float, str]
         return float(calibrator.transform([p_raw])[0]), "isotonic"
 
     return p_raw, "unknown"
+
+
+def compute_feature_importance(model_path: Path) -> pd.DataFrame:
+    """
+    Standardized-coefficient magnitudes from a trained pipeline, sorted by |coefficient|.
+
+    Every feature is scaled (mean 0, std 1) before fitting (see _fit_win_model's
+    ColumnTransformer), so coefficients are already directly comparable across features
+    without any further normalization: each one is the effect on the log-odds (win target)
+    or predicted margin (margin target) of a one-standard-deviation change in that feature.
+    """
+    pipe = joblib.load(model_path)
+    is_margin = "margin" in model_path.name.lower()
+    feature_path = model_path.parent / ("feature_columns_margin.json" if is_margin else "feature_columns.json")
+    if not feature_path.exists():
+        raise RuntimeError(f"No {feature_path.name} found next to {model_path}")
+    feature_cols = json.loads(feature_path.read_text(encoding="utf-8"))
+
+    model = pipe.named_steps["model"]
+    coefs = np.ravel(model.coef_)
+    if len(coefs) != len(feature_cols):
+        raise RuntimeError(f"Coefficient count ({len(coefs)}) doesn't match feature count ({len(feature_cols)})")
+
+    df = pd.DataFrame({"feature": feature_cols, "coefficient_per_sd": coefs})
+    if not is_margin:
+        df["odds_ratio_per_sd"] = np.exp(df["coefficient_per_sd"])
+    df["_abs"] = df["coefficient_per_sd"].abs()
+    df = df.sort_values("_abs", ascending=False).drop(columns="_abs").reset_index(drop=True)
+    return df
 
 
 def _fit_win_model(
@@ -306,12 +362,15 @@ def train_model(
             "test": {"prob": _eval_probs(p_test_prob, (y_test_np > 0).astype(int))},
         }
 
+        # Distinct filenames from the win-target outputs below (feature_columns.json,
+        # metrics.json, model_meta.json) so training one target doesn't silently overwrite
+        # the other's artifacts.
         model_dir.mkdir(parents=True, exist_ok=True)
         joblib.dump(pipe, model_dir / "gt_margin_ridge.joblib")
         (model_dir / "margin_sigma.json").write_text(json.dumps({"sigma": sigma}, indent=2), encoding="utf-8")
-        (model_dir / "feature_columns.json").write_text(json.dumps(feature_cols, indent=2), encoding="utf-8")
-        (model_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-        (model_dir / "model_meta.json").write_text(
+        (model_dir / "feature_columns_margin.json").write_text(json.dumps(feature_cols, indent=2), encoding="utf-8")
+        (model_dir / "metrics_margin.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+        (model_dir / "model_meta_margin.json").write_text(
             json.dumps({"target": "margin", "model_file": "gt_margin_ridge.joblib"}, indent=2),
             encoding="utf-8",
         )
@@ -382,6 +441,7 @@ def walk_forward_eval(
     half_life_years: float = 3.0,
     calibration: str = "auto",
     eval_team: str | None = None,
+    feature_cols: list[str] | None = None,
     out_dir: Path = Path("reports") / "walkforward",
 ) -> dict[str, Any]:
     """
@@ -395,6 +455,10 @@ def walk_forward_eval(
     `eval_team`, if given, restricts only the held-out test rows to that team's games (train
     and validation still use every row) - the metric for "does a model trained on pooled
     data actually predict this one team better", as opposed to overall FBS-wide accuracy.
+
+    `feature_cols`, if given, restricts the model to that subset instead of the full
+    `WIN_MODEL_FEATURE_COLS` - used by `ablation_study()` to measure each feature group's
+    marginal contribution.
     """
     df = pd.read_csv(dataset_csv)
     if df.empty:
@@ -403,7 +467,8 @@ def walk_forward_eval(
     df = df.dropna(subset=["gt_win"])
     df["year"] = df["year"].astype(int)
 
-    feature_cols = [c for c in WIN_MODEL_FEATURE_COLS if c in df.columns and df[c].notna().any()]
+    requested_cols = feature_cols if feature_cols is not None else WIN_MODEL_FEATURE_COLS
+    feature_cols = [c for c in requested_cols if c in df.columns and df[c].notna().any()]
     if not feature_cols:
         raise RuntimeError("No usable feature columns (all missing).")
 
@@ -492,3 +557,63 @@ def walk_forward_eval(
     (out_dir / "walkforward_metrics.json").write_text(json.dumps(overall, indent=2), encoding="utf-8")
 
     return overall
+
+
+def ablation_study(
+    dataset_csv: Path,
+    *,
+    start_test_year: int,
+    end_test_year: int | None = None,
+    half_life_years: float = 3.0,
+    calibration: str = "auto",
+    eval_team: str | None = None,
+    out_dir: Path = Path("reports") / "ablation",
+) -> dict[str, Any]:
+    """
+    Cumulative feature-group ablation: starting from `context` alone, adds one group from
+    FEATURE_GROUPS at a time (elo, then form, then talent, then returning production, then
+    recruiting) and re-runs walk_forward_eval() on each cumulative subset - the same rolling
+    methodology and test years for every step, so differences between steps are attributable
+    to the feature group just added, not to evaluation noise.
+    """
+    all_group_features = [f for _, feats in FEATURE_GROUPS for f in feats]
+    missing = set(WIN_MODEL_FEATURE_COLS) - set(all_group_features)
+    extra = set(all_group_features) - set(WIN_MODEL_FEATURE_COLS)
+    if missing or extra:
+        raise RuntimeError(f"FEATURE_GROUPS out of sync with WIN_MODEL_FEATURE_COLS: missing={missing} extra={extra}")
+
+    steps: list[dict[str, Any]] = []
+    cumulative: list[str] = []
+    for group_name, group_feats in FEATURE_GROUPS:
+        cumulative = cumulative + group_feats
+        result = walk_forward_eval(
+            dataset_csv,
+            start_test_year=start_test_year,
+            end_test_year=end_test_year,
+            half_life_years=half_life_years,
+            calibration=calibration,
+            eval_team=eval_team,
+            feature_cols=list(cumulative),
+            out_dir=out_dir / group_name,
+        )
+        steps.append(
+            {
+                "added_group": group_name,
+                "cumulative_features": list(cumulative),
+                "n_games": result["n_games"],
+                "n_folds": result["n_folds"],
+                "raw": {k: v for k, v in result["raw"].items() if k != "bins_10"},
+                "calibrated": {k: v for k, v in result["calibrated"].items() if k != "bins_10"},
+            }
+        )
+
+    summary = {
+        "dataset": str(dataset_csv),
+        "start_test_year": start_test_year,
+        "end_test_year": end_test_year,
+        "eval_team": eval_team,
+        "steps": steps,
+    }
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "ablation_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    return summary

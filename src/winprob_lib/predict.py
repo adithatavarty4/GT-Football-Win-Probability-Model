@@ -72,7 +72,7 @@ def _fetch_matchup_features(
             return {}
         return {}
 
-    talent = _try_index("/talent", {"year": year}, team_field="school")
+    talent = _try_index("/talent", {"year": year}, team_field="team")
     returning = _try_index("/player/returning", {"year": year}, team_field="team")
     recruiting = _try_index("/recruiting/teams", {"year": year}, team_field="team")
 
@@ -83,7 +83,7 @@ def _fetch_matchup_features(
     talent_diff = (gt_talent - opp_talent) if gt_talent is not None and opp_talent is not None else None
 
     def _returning_total(v: dict[str, Any]) -> float | None:
-        for key in ("total", "totalPpa", "total_ppa", "total_returning"):
+        for key in ("totalPPA", "total", "totalPpa", "total_ppa", "total_returning"):
             out = _as_float(v.get(key))
             if out is not None:
                 return out
@@ -138,6 +138,8 @@ def _fetch_matchup_features(
 
 def _load_model_bundle(model_path: Path) -> tuple[Any, Any | None, list[str] | None]:
     pipe = joblib.load(model_path)
+    is_margin = "margin" in model_path.name.lower()
+
     calibrator = None
     calibrator_path = model_path.parent / "gt_winprob_calibrator.joblib"
     if calibrator_path.exists():
@@ -147,7 +149,9 @@ def _load_model_bundle(model_path: Path) -> tuple[Any, Any | None, list[str] | N
         legacy_path = model_path.parent / "gt_winprob_calibrator_isotonic.joblib"
         calibrator = joblib.load(legacy_path) if legacy_path.exists() else None
 
-    feature_path = model_path.parent / "feature_columns.json"
+    # Margin-target and win-target artifacts use separate sidecar filenames (see
+    # train_model() in train.py) so training one target doesn't overwrite the other's.
+    feature_path = model_path.parent / ("feature_columns_margin.json" if is_margin else "feature_columns.json")
     feature_cols: list[str] | None = None
     if feature_path.exists():
         try:
@@ -158,17 +162,15 @@ def _load_model_bundle(model_path: Path) -> tuple[Any, Any | None, list[str] | N
 
 
 def _load_model_meta(model_path: Path) -> dict[str, Any]:
-    meta_path = model_path.parent / "model_meta.json"
+    is_margin = "margin" in model_path.name.lower()
+    meta_path = model_path.parent / ("model_meta_margin.json" if is_margin else "model_meta.json")
     if not meta_path.exists():
         # Best-effort guess for older artifacts.
-        name = model_path.name.lower()
-        if "margin" in name:
-            return {"target": "margin"}
-        return {"target": "win"}
+        return {"target": "margin"} if is_margin else {"target": "win"}
     try:
         return json.loads(meta_path.read_text(encoding="utf-8"))
     except Exception:
-        return {"target": "win"}
+        return {"target": "margin"} if is_margin else {"target": "win"}
 
 
 def _norm_cdf_scalar(x: float) -> float:

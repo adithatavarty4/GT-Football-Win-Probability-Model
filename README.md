@@ -50,7 +50,7 @@ flowchart TD
 - `src/winprob_lib/` - the implementation, split by concern:
   - `cfbd_client.py` - `CFBDClient` (caching HTTP client) and team-name resolution
   - `features.py` - dataset builders (`build_dataset`, `build_dataset_all_fbs`) and the pregame feature-engineering functions they share
-  - `train.py` - model fitting, calibration selection, `train_model`, `walk_forward_eval`
+  - `train.py` - model fitting, calibration selection, `train_model`, `walk_forward_eval`, `compute_feature_importance`, `ablation_study`
   - `predict.py` - live feature fetch + prediction for a single matchup or a season schedule
 - `scripts/analysis_report.py`, `scripts/market_compare.py` - downstream reporting/backtesting, unchanged; `market_compare.py` imports `CFBDClient`/`resolve_team_name` from `scripts/winprob.py`, which re-exports them from `winprob_lib`
 
@@ -62,6 +62,7 @@ flowchart TD
 - Reproducible metrics saved to `models/metrics.json`
 - Caching of CFBD responses for faster reruns
 - Optional reporting + plots and comparisons vs ESPN FPI
+- Feature importance (standardized coefficients) and cumulative feature-group ablation, both built on the walk-forward methodology
 
 ## Model features used
 
@@ -143,19 +144,18 @@ league-wide instead of once per team, so it's fewer CFBD requests, not more (rou
 The repo includes example trained artifacts under `models/`, trained on the pooled all-FBS
 dataset (see Quickstart). For that run:
 
-- Train: 2014-2022, Validation: 2023-2024, Test: 2025 (league-wide, ~17,000 train rows)
+- Train: 2014-2022, Validation: 2023-2024, Test: 2025 (league-wide, ~17,700 train rows)
 - Recency weighting half-life: 3.0 years
 - Calibration selected: isotonic
-- Test (league-wide, calibrated): accuracy 0.730, Brier 0.174, log loss 0.549
-- Test (league-wide, raw/uncalibrated): accuracy 0.733, Brier 0.173, log loss 0.512
+- Test (league-wide, calibrated): accuracy 0.731, Brier 0.176, log loss 0.574
+- Test (league-wide, raw/uncalibrated): accuracy 0.736, Brier 0.175, log loss 0.519
 
 Full details: `models/metrics.json`.
 
-Note the raw (uncalibrated) log loss is actually slightly *better* than the calibrated one here -
-with ~17,000 training rows, logistic regression's own output is already well-calibrated (test ECE
-0.016), so the auto-selected calibrator (chosen by validation Brier score alone) buys almost
-nothing and can cost a bit of log loss. Worth a second look if you're optimizing log loss
-specifically; `--calibration none` skips it entirely.
+Note the raw (uncalibrated) log loss is actually *better* than the calibrated one here - the
+auto-selected calibrator (chosen by validation Brier score alone) buys very little accuracy/Brier
+and costs some log loss. Worth a second look if you're optimizing log loss specifically;
+`--calibration none` skips it entirely.
 
 Interpretation: Brier/log loss reward well-calibrated probabilities, so improvements here are a stronger signal than raw pick accuracy alone.
 
@@ -177,17 +177,20 @@ against the pooled all-FBS model (evaluated on GT's games specifically, via `--e
 
 | | Accuracy (raw) | Brier (raw) | Accuracy (calibrated) | Brier (calibrated) |
 |---|---|---|---|---|
-| GT-only training | 0.494 | 0.311 | 0.565 | 0.273 |
-| Pooled all-FBS training | 0.635 | 0.224 | 0.647 | 0.216 |
+| GT-only training | 0.447 | 0.339 | 0.529 | 0.300 |
+| Pooled all-FBS training | 0.706 | 0.218 | 0.659 | 0.216 |
 
 `python .\scripts\winprob.py walkforward --dataset data_processed\model_dataset_all_fbs.csv --eval-team "Georgia Tech" --start-test-year 2019`
 
-Pooling clearly helps here - unsurprising, since ~150 rows isn't enough for a logistic regression
-to find stable weights, let alone calibrate on top of them. One caveat worth flagging: calibrated
-log loss was *worse* than raw log loss in both rows above (isotonic calibration fit on a single
-season - or even the whole league in a season - can still snap to a hard 0/1 in some probability
-range, which is catastrophic for log loss the one time it's wrong). Selecting the calibrator by
-validation Brier alone doesn't protect against that; see Future improvements.
+Pooling helps by an even wider margin than it first looked - unsurprising, since ~150 rows isn't
+enough for a logistic regression to find stable weights, and now that all 20 features (see the
+`talent`/`returning` bug fix below) actually carry signal, GT-only's tiny sample has even more
+parameters to estimate from the same 148 rows, making it overfit worse than before. One caveat
+worth flagging: calibrated log loss was *worse* than raw log loss for GT-only above (isotonic
+calibration fit on a single season - or even the whole league in a season - can still snap to a
+hard 0/1 in some probability range, which is catastrophic for log loss the one time it's wrong).
+Selecting the calibrator by validation Brier alone doesn't protect against that; see Future
+improvements.
 
 ### Does older history actually help?
 
@@ -199,15 +202,83 @@ training pool goes:
 
 | Training pool | Accuracy (calibrated) | Brier (calibrated) | Log loss (calibrated) | ECE |
 |---|---|---|---|---|
-| Full 2014-2025 | 0.619 | 0.216 | 0.606 | 0.147 |
-| 2018-2025 only | **0.651** | **0.211** | **0.596** | **0.115** |
+| Full 2014-2025 | 0.635 | 0.216 | 0.612 | 0.149 |
+| 2018-2025 only | 0.635 | **0.213** | **0.604** | **0.143** |
 
-The 2018+-only pool wins on every metric despite having roughly a third to half as many training
-rows per fold. That suggests the exponential decay isn't fully compensating for the portal-era
-shift - dropping the pre-2018 data outright currently beats keeping it with decay. Not yet acted
-on (would mean changing the default `--from-year` for the deployed model), since 63 games is still
-a modest sample to hang a permanent decision on - but it's a real, consistent signal worth more
-than one run's worth of trust.
+2018+-only still wins on Brier/log loss/ECE, but the gap is now small - both training pools land
+on identical accuracy. An earlier run of this same comparison (before the `talent`/`returning`
+field-name bug below was found and fixed) showed a much larger gap (0.619 vs 0.651 accuracy).
+With those two features actually working now, most of that earlier gap closed - a good reminder
+that a "the data doesn't transfer across eras" conclusion can really be "two of your features were
+silently broken the whole time," and it's worth re-checking findings after a real bug fix rather
+than assuming they still hold. The remaining small edge for 2018+ is still a real, consistent
+signal, just a much less dramatic one than first measured.
+
+## Feature importance
+
+Every feature is standardized (mean 0, std 1) before fitting, so the logistic regression's raw
+coefficients are already directly comparable - each one is the effect on the log-odds of a
+one-standard-deviation change in that feature.
+
+`python .\scripts\winprob.py feature-importance --model models\gt_winprob_logreg.joblib`
+
+Top features by |coefficient|, from the current deployed (pooled all-FBS) model:
+
+| feature | coefficient (per SD) | odds ratio (per SD) |
+|---|---|---|
+| `elo_diff` | 0.861 | 2.37 |
+| `opp_elo_avg_diff` | 0.515 | 1.67 |
+| `w_opp_elo_avg_diff` | -0.458 | 0.69 |
+| `is_home` | 0.310 | 1.36 |
+| `talent_diff` | 0.245 | 1.28 |
+| `returning_diff` | 0.208 | 1.23 |
+
+Elo differential dominates by a wide margin - unsurprising, since it's the single most
+information-dense feature (it already summarizes a team's whole résumé into one number).
+Full ranking of all 20 features: `reports/feature_importance.csv`.
+
+## Ablation study
+
+Cumulative feature-group ablation: start from location/context alone, add one data source at a
+time (Elo, season-to-date form, talent, returning production, recruiting), and re-run
+`walk_forward_eval()` on each cumulative subset over the identical test years - so differences
+between rows are attributable to the group just added, not evaluation noise.
+
+`python .\scripts\winprob.py ablation --dataset data_processed\model_dataset_all_fbs.csv --eval-team "Georgia Tech" --start-test-year 2019`
+
+| Added group | Accuracy (raw) | Brier (raw) | Accuracy (calibrated) | Brier (calibrated) |
+|---|---|---|---|---|
+| context (home/away/neutral, opp FBS) | 0.529 | 0.247 | 0.529 | 0.247 |
+| + elo | 0.647 | 0.219 | 0.635 | 0.211 |
+| + form | 0.659 | 0.219 | 0.694 | 0.213 |
+| + talent | 0.635 | 0.223 | 0.659 | 0.222 |
+| + returning production | 0.682 | 0.217 | 0.694 | 0.215 |
+| + recruiting (full feature set) | 0.706 | 0.218 | 0.659 | 0.216 |
+
+Elo alone jumps accuracy from a near-coin-flip (0.529) to 0.647 - by far the single biggest
+contribution, consistent with the coefficient ranking above. `talent`'s marginal contribution on
+top of `form` is small and noisy on this 85-game sample (it can even look like a step backward,
+which is plausibly just noise combined with `talent_diff` correlating with `recruit_points_diff`
+and `elo_diff` - roster talent, recruiting rank, and results all measure overlapping things).
+Full per-step results (predictions, val Brier per fold): `reports/ablation/`.
+
+### A bug this surfaced
+
+Building the feature-importance table above is what caught this: `talent_diff` and
+`returning_diff` were **entirely missing** (0 non-null out of ~19,500 rows) in every dataset this
+project had ever built. Two silent bugs, both field-name mismatches against CFBD's actual
+response schema:
+
+- `/talent` responses use `"team"` as the school-name key, not `"school"` (the code was written
+  assuming the same key name `/teams` uses) - so the lookup index was always empty.
+- `/player/returning` responses use `"totalPPA"` (that exact casing), not `"totalPpa"` - so the
+  fallback chain in `_returning_total()` never matched and always fell through to `None`.
+
+Both are fixed in `cfbd_client.py`/`features.py`/`predict.py`. Rebuilding after the fix: `talent_diff`
+went from 0 to 17,782 populated rows (of 19,456), `returning_diff` from 0 to 17,846. Walk-forward
+accuracy on GT's games rose from 0.635 to 0.706 (raw) as a direct result - these two features had
+never actually contributed to any result in this README before this fix, despite being described
+as part of the model the whole time.
 
 ## Model vs ESPN FPI (win %)
 

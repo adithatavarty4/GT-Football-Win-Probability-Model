@@ -1,0 +1,249 @@
+{
+  "dataset": "data_processed\\model_dataset_all_fbs.csv",
+  "n_games": 85,
+  "n_folds": 7,
+  "start_test_year": 2019,
+  "end_test_year": 2025,
+  "raw": {
+    "accuracy": 0.6588235294117647,
+    "brier": 0.2186183467308366,
+    "log_loss": 0.6326043675458157,
+    "ece_10bin": 0.10436262205292628,
+    "bins_10": [
+      {
+        "bin_lo": 0.0,
+        "bin_hi": 0.1,
+        "n": 12.0,
+        "mean_pred": 0.06057233161716558,
+        "empirical_winrate": 0.16666666666666666
+      },
+      {
+        "bin_lo": 0.1,
+        "bin_hi": 0.2,
+        "n": 13.0,
+        "mean_pred": 0.1640062476789429,
+        "empirical_winrate": 0.3076923076923077
+      },
+      {
+        "bin_lo": 0.2,
+        "bin_hi": 0.30000000000000004,
+        "n": 11.0,
+        "mean_pred": 0.2483623733047164,
+        "empirical_winrate": 0.36363636363636365
+      },
+      {
+        "bin_lo": 0.30000000000000004,
+        "bin_hi": 0.4,
+        "n": 11.0,
+        "mean_pred": 0.3508301336059643,
+        "empirical_winrate": 0.45454545454545453
+      },
+      {
+        "bin_lo": 0.4,
+        "bin_hi": 0.5,
+        "n": 8.0,
+        "mean_pred": 0.45336405884403597,
+        "empirical_winrate": 0.375
+      },
+      {
+        "bin_lo": 0.5,
+        "bin_hi": 0.6000000000000001,
+        "n": 12.0,
+        "mean_pred": 0.5379110166243296,
+        "empirical_winrate": 0.5
+      },
+      {
+        "bin_lo": 0.6000000000000001,
+        "bin_hi": 0.7000000000000001,
+        "n": 6.0,
+        "mean_pred": 0.6638703234131789,
+        "empirical_winrate": 0.5
+      },
+      {
+        "bin_lo": 0.7000000000000001,
+        "bin_hi": 0.8,
+        "n": 4.0,
+        "mean_pred": 0.7788257709467454,
+        "empirical_winrate": 0.75
+      },
+      {
+        "bin_lo": 0.8,
+        "bin_hi": 0.9,
+        "n": 2.0,
+        "mean_pred": 0.8406031810285034,
+        "empirical_winrate": 1.0
+      },
+      {
+        "bin_lo": 0.9,
+        "bin_hi": 1.0,
+        "n": 6.0,
+        "mean_pred": 0.9702877195491956,
+        "empirical_winrate": 0.8333333333333334
+      }
+    ]
+  },
+  "calibrated": {
+    "accuracy": 0.6941176470588235,
+    "brier": 0.21303855014692036,
+    "log_loss": 1.0032276188736922,
+    "ece_10bin": 0.12367513635925756,
+    "bins_10": [
+      {
+        "bin_lo": 0.0,
+        "bin_hi": 0.1,
+        "n": 11.0,
+        "mean_pred": 0.04920309968189585,
+        "empirical_winrate": 0.18181818181818182
+      },
+      {
+        "bin_lo": 0.1,
+        "bin_hi": 0.2,
+        "n": 11.0,
+        "mean_pred": 0.1503488709309703,
+        "empirical_winrate": 0.18181818181818182
+      },
+      {
+        "bin_lo": 0.2,
+        "bin_hi": 0.30000000000000004,
+        "n": 16.0,
+        "mean_pred": 0.25038882466732104,
+        "empirical_winrate": 0.375
+      },
+      {
+        "bin_lo": 0.30000000000000004,
+        "bin_hi": 0.4,
+        "n": 7.0,
+        "mean_pred": 0.34728041864008097,
+        "empirical_winrate": 0.5714285714285714
+      },
+      {
+        "bin_lo": 0.4,
+        "bin_hi": 0.5,
+        "n": 13.0,
+        "mean_pred": 0.4719633457891023,
+        "empirical_winrate": 0.3076923076923077
+      },
+      {
+        "bin_lo": 0.5,
+        "bin_hi": 0.6000000000000001,
+        "n": 6.0,
+        "mean_pred": 0.5338687493859907,
+        "empirical_winrate": 0.6666666666666666
+      },
+      {
+        "bin_lo": 0.6000000000000001,
+        "bin_hi": 0.7000000000000001,
+        "n": 9.0,
+        "mean_pred": 0.6572167396835732,
+        "empirical_winrate": 0.5555555555555556
+      },
+      {
+        "bin_lo": 0.7000000000000001,
+        "bin_hi": 0.8,
+        "n": 5.0,
+        "mean_pred": 0.738087848841513,
+        "empirical_winrate": 0.8
+      },
+      {
+        "bin_lo": 0.8,
+        "bin_hi": 0.9,
+        "n": 1.0,
+        "mean_pred": 0.8362573099415205,
+        "empirical_winrate": 1.0
+      },
+      {
+        "bin_lo": 0.9,
+        "bin_hi": 1.0,
+        "n": 6.0,
+        "mean_pred": 0.9706795484151107,
+        "empirical_winrate": 0.8333333333333334
+      }
+    ]
+  },
+  "folds": [
+    {
+      "test_year": 2019,
+      "n_train": 6546,
+      "n_val": 1656,
+      "n_test": 12,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.1667204129097201,
+        "isotonic": 0.16274461794295636,
+        "sigmoid_logit": 0.1667255774455784
+      }
+    },
+    {
+      "test_year": 2020,
+      "n_train": 8202,
+      "n_val": 1662,
+      "n_test": 10,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.16630542406058496,
+        "isotonic": 0.16274025786473223,
+        "sigmoid_logit": 0.1659733852377992
+      }
+    },
+    {
+      "test_year": 2021,
+      "n_train": 9864,
+      "n_val": 1102,
+      "n_test": 12,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.18603602556498372,
+        "isotonic": 0.1813426630910698,
+        "sigmoid_logit": 0.1858906848493232
+      }
+    },
+    {
+      "test_year": 2022,
+      "n_train": 10966,
+      "n_val": 1657,
+      "n_test": 12,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.18079929568608327,
+        "isotonic": 0.17712830829609877,
+        "sigmoid_logit": 0.18068451409647182
+      }
+    },
+    {
+      "test_year": 2023,
+      "n_train": 12623,
+      "n_val": 1672,
+      "n_test": 13,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.188516352079026,
+        "isotonic": 0.183481635846782,
+        "sigmoid_logit": 0.18775712452290239
+      }
+    },
+    {
+      "test_year": 2024,
+      "n_train": 14295,
+      "n_val": 1702,
+      "n_test": 13,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.17204345674892182,
+        "isotonic": 0.167582314160596,
+        "sigmoid_logit": 0.17172234723056404
+      }
+    },
+    {
+      "test_year": 2025,
+      "n_train": 15997,
+      "n_val": 1717,
+      "n_test": 13,
+      "calibrator": "isotonic",
+      "val_brier": {
+        "raw": 0.18236563738193648,
+        "isotonic": 0.17890552031275966,
+        "sigmoid_logit": 0.18211021758310372
+      }
+    }
+  ]
+}
