@@ -246,6 +246,68 @@ def _elo_snapshot(client: CFBDClient, *, year: int, week: int) -> dict[str, dict
     return _index_by_team(items, team_field="team")
 
 
+# Mean-reversion carryover for a team's Elo entering a season with no current-season Elo
+# published yet (e.g. predicting a game before/early in a season). Fit by linear regression
+# of "team's actual week-1 pregame Elo in year Y" on "team's final pregame Elo of year Y-1"
+# across 1,433 team-seasons (2015-2025) from this project's own cached CFBD data:
+# R^2 = 0.97, reverting toward a long-run mean of ~1490 (close to the conventional 1500
+# Elo baseline). Last season's ending rating is a strong predictor of where a team actually
+# starts the next one, but roster turnover pulls it partway back toward average.
+ELO_CARRYOVER_SLOPE = 0.6712
+ELO_CARRYOVER_INTERCEPT = 489.85
+
+
+def _team_final_elo(client: CFBDClient, *, team: str, year: int, use_cache: bool = True) -> float | None:
+    """
+    Best-available proxy for a team's Elo at the end of `year`: the pregame Elo of their
+    chronologically last game that season (their postseason game if they played one, else
+    their last regular-season game).
+    """
+    try:
+        reg_games = client.get("/games", {"year": year, "seasonType": "regular", "team": team}, use_cache=use_cache)
+    except Exception:
+        reg_games = []
+    try:
+        post_games = client.get("/games", {"year": year, "seasonType": "postseason", "team": team}, use_cache=use_cache)
+    except Exception:
+        post_games = []
+
+    def _team_pregame_elo(game: dict[str, Any]) -> float | None:
+        home = _get_any(game, "home_team", "homeTeam")
+        away = _get_any(game, "away_team", "awayTeam")
+        if team == home:
+            return _as_float(_get_any(game, "homePregameElo", "home_pregame_elo"))
+        if team == away:
+            return _as_float(_get_any(game, "awayPregameElo", "away_pregame_elo"))
+        return None
+
+    pool = post_games if isinstance(post_games, list) and post_games else (reg_games if isinstance(reg_games, list) else [])
+    entries: list[tuple[int, float]] = []
+    for g in pool:
+        if not isinstance(g, dict):
+            continue
+        wk = _get_any(g, "week")
+        elo = _team_pregame_elo(g)
+        if isinstance(wk, int) and elo is not None:
+            entries.append((wk, elo))
+    if not entries:
+        return None
+    entries.sort(key=lambda e: e[0])
+    return float(entries[-1][1])
+
+
+def _preseason_elo_estimate(client: CFBDClient, *, team: str, year: int, use_cache: bool = True) -> float | None:
+    """
+    Carryover Elo estimate for a team entering `year`, for use only when no current-season
+    Elo data exists yet. Returns None if the prior season's final Elo can't be found either
+    (e.g. the team wasn't FBS, or it's the first year in the data).
+    """
+    final_prior = _team_final_elo(client, team=team, year=year - 1, use_cache=use_cache)
+    if final_prior is None:
+        return None
+    return ELO_CARRYOVER_INTERCEPT + ELO_CARRYOVER_SLOPE * final_prior
+
+
 def build_dataset(
     *,
     year_from: int,
@@ -415,6 +477,17 @@ def build_dataset(
                     elo_diff = gt_elo - opp_elo
                 elif opp_is_fbs == 0 and gt_elo is not None:
                     elo_diff = float(gt_elo - FCS_ELO_FLOOR)
+
+            # Fallback: no current-season Elo published yet at all (e.g. predicting a game
+            # before/early in a season) -- use each team's prior-season-final Elo, regressed
+            # toward the mean via the empirically-fit carryover estimate.
+            if elo_diff is None:
+                gt_elo_carry = _preseason_elo_estimate(client, team=team, year=year, use_cache=use_cache)
+                opp_elo_carry = _preseason_elo_estimate(client, team=opponent, year=year, use_cache=use_cache)
+                if gt_elo_carry is not None and opp_elo_carry is not None:
+                    elo_diff = gt_elo_carry - opp_elo_carry
+                elif opp_is_fbs == 0 and gt_elo_carry is not None:
+                    elo_diff = float(gt_elo_carry - FCS_ELO_FLOOR)
 
             gt_talent = _as_float((talent_by_team.get(team) or {}).get("talent"))
             opp_talent = _as_float((talent_by_team.get(opponent) or {}).get("talent"))
@@ -680,6 +753,16 @@ def build_dataset_all_fbs(
                         elo_diff = team_elo - opp_elo
                     elif opp_is_fbs == 0 and team_elo is not None:
                         elo_diff = float(team_elo - FCS_ELO_FLOOR)
+
+                # Fallback: no current-season Elo published yet at all -- use each team's
+                # prior-season-final Elo, regressed toward the mean.
+                if elo_diff is None:
+                    team_elo_carry = _preseason_elo_estimate(client, team=team, year=year, use_cache=use_cache)
+                    opp_elo_carry = _preseason_elo_estimate(client, team=opponent, year=year, use_cache=use_cache)
+                    if team_elo_carry is not None and opp_elo_carry is not None:
+                        elo_diff = team_elo_carry - opp_elo_carry
+                    elif opp_is_fbs == 0 and team_elo_carry is not None:
+                        elo_diff = float(team_elo_carry - FCS_ELO_FLOOR)
 
                 gt_talent = _as_float((talent_by_team.get(team) or {}).get("talent"))
                 opp_talent = _as_float((talent_by_team.get(opponent) or {}).get("talent"))

@@ -243,6 +243,7 @@ Default output:
 - CFBD requires an API key and may enforce rate limits; caching helps reduce repeated calls.
 - This is a personal/educational model and is not affiliated with CFBD or Georgia Tech.
 - Team FBS/FCS classification is fetched per-year (`/teams?year=Y`), not as a single present-day snapshot - several teams moved FCS->FBS during 2014-2025 (e.g. Jacksonville State in 2023), and a present-day-only lookup would mislabel their older games.
+- Elo differential has a preseason fallback: if CFBD hasn't published any current-season Elo yet (true for the entire off-season/very early in a season - e.g. `/ratings/elo` and embedded pregame Elo are both empty for 2026 as of this writing), each team's prior-season-final Elo is regressed toward the mean (`ELO_CARRYOVER_SLOPE`/`ELO_CARRYOVER_INTERCEPT` in `features.py`, fit by linear regression against 1,433 historical team-seasons, R^2 = 0.97) and used instead of leaving `elo_diff` missing.
 
 ## Limitations
 

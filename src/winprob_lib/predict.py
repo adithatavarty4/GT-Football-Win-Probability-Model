@@ -10,7 +10,7 @@ import pandas as pd
 
 from .cfbd_client import CFBDClient, _is_fbs_team, _team_classification_map, resolve_team_name
 from .features import FCS_ELO_FLOOR, NONFBS_RECRUIT_POINTS_FLOOR, NONFBS_RECRUIT_RANK_FLOOR, NONFBS_TALENT_FLOOR
-from .features import _compute_prior_team_form, _elo_snapshot
+from .features import _compute_prior_team_form, _elo_snapshot, _preseason_elo_estimate
 from .train import _apply_calibrator
 from .util import _as_float, _get_any, _index_by_team
 
@@ -50,6 +50,17 @@ def _fetch_matchup_features(
             elo_diff = float(gt_elo - FCS_ELO_FLOOR)
     except Exception:
         elo_diff = None
+
+    # Fallback: no current-season Elo published yet at all (e.g. predicting before/early in
+    # a season CFBD hasn't rated yet) -- use each team's prior-season-final Elo, regressed
+    # toward the mean via the empirically-fit carryover estimate.
+    if elo_diff is None:
+        gt_elo_carry = _preseason_elo_estimate(client, team=team, year=year, use_cache=True)
+        opp_elo_carry = _preseason_elo_estimate(client, team=opponent, year=year, use_cache=True)
+        if gt_elo_carry is not None and opp_elo_carry is not None:
+            elo_diff = gt_elo_carry - opp_elo_carry
+        elif opp_is_fbs == 0 and gt_elo_carry is not None:
+            elo_diff = float(gt_elo_carry - FCS_ELO_FLOOR)
 
     # Season-level
     def _try_index(endpoint: str, params: dict[str, Any], team_field: str) -> dict[str, dict[str, Any]]:
