@@ -137,7 +137,7 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     if args.cmd == "predict":
         pipe, calibrator, feature_cols = _load_model_bundle(args.model)
-        X_full = _fetch_matchup_features(
+        X_full, feature_meta = _fetch_matchup_features(
             team="Georgia Tech",
             year=args.year,
             week=args.week,
@@ -153,6 +153,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             "week": args.week,
             "p_win": p_win,
             **extra,
+            **feature_meta,
         }
         print(json.dumps(out, indent=2))
         return 0

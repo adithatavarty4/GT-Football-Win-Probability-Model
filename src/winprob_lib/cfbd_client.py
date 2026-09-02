@@ -53,7 +53,11 @@ class CFBDClient:
         resp = requests.get(url, headers=self._headers(), params=_stable_params(params), timeout=self.timeout_s)
         resp.raise_for_status()
         data = resp.json()
-        if use_cache:
+        # Don't cache an empty response: for endpoints that fill in over time (talent,
+        # recruiting, returning production, in-season Elo), an empty list usually means
+        # "not published yet", not "will always be empty". Caching it here has no expiry,
+        # so it would permanently and silently hide real data that shows up later.
+        if use_cache and data:
             cache_path.write_text(json.dumps(data), encoding="utf-8")
         return data
 

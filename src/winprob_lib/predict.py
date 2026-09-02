@@ -10,9 +10,22 @@ import pandas as pd
 
 from .cfbd_client import CFBDClient, _is_fbs_team, _team_classification_map, resolve_team_name
 from .features import FCS_ELO_FLOOR, NONFBS_RECRUIT_POINTS_FLOOR, NONFBS_RECRUIT_RANK_FLOOR, NONFBS_TALENT_FLOOR
-from .features import _compute_prior_team_form, _elo_snapshot, _preseason_elo_estimate
+from .features import (
+    _compute_prior_team_form,
+    _elo_snapshot,
+    _preseason_elo_estimate,
+    _resolve_recruit_points_diff,
+    _resolve_recruit_rank_diff,
+    _resolve_talent_diff,
+)
 from .train import _apply_calibrator
 from .util import _as_float, _get_any, _index_by_team
+
+# The 5 features whose live-vs-fallback status meaningfully varies game to game (unlike
+# location/context, which are always known, or in-season form, which is legitimately 0 before
+# a team's first game rather than "missing"). Used to build the completeness/source columns
+# in predict_schedule()'s output -- see _fetch_matchup_features()'s second return value.
+ROSTER_STRENGTH_FEATURES = ["elo_diff", "talent_diff", "returning_diff", "recruit_points_diff", "recruit_rank_diff"]
 
 
 def _fetch_matchup_features(
@@ -22,7 +35,7 @@ def _fetch_matchup_features(
     week: int,
     opponent: str,
     home: str,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, dict[str, Any]]:
     client = CFBDClient()
     class_map = _team_classification_map(client, year=year, use_cache=True)
 
@@ -40,14 +53,17 @@ def _fetch_matchup_features(
 
     # Elo as-of previous week (if present).
     elo_diff = None
+    elo_source = "missing"
     try:
         snap = _elo_snapshot(client, year=year, week=max(1, week - 1))
         gt_elo = _as_float((snap.get(team) or {}).get("elo"))
         opp_elo = _as_float((snap.get(opponent) or {}).get("elo"))
         if gt_elo is not None and opp_elo is not None:
             elo_diff = gt_elo - opp_elo
+            elo_source = "live"
         elif opp_is_fbs == 0 and gt_elo is not None:
             elo_diff = float(gt_elo - FCS_ELO_FLOOR)
+            elo_source = "live"
     except Exception:
         elo_diff = None
 
@@ -59,8 +75,10 @@ def _fetch_matchup_features(
         opp_elo_carry = _preseason_elo_estimate(client, team=opponent, year=year, use_cache=True)
         if gt_elo_carry is not None and opp_elo_carry is not None:
             elo_diff = gt_elo_carry - opp_elo_carry
+            elo_source = "carryover"
         elif opp_is_fbs == 0 and gt_elo_carry is not None:
             elo_diff = float(gt_elo_carry - FCS_ELO_FLOOR)
+            elo_source = "carryover"
 
     # Season-level
     def _try_index(endpoint: str, params: dict[str, Any], team_field: str) -> dict[str, dict[str, Any]]:
@@ -76,11 +94,21 @@ def _fetch_matchup_features(
     returning = _try_index("/player/returning", {"year": year}, team_field="team")
     recruiting = _try_index("/recruiting/teams", {"year": year}, team_field="team")
 
-    gt_talent = _as_float((talent.get(team) or {}).get("talent"))
-    opp_talent = _as_float((talent.get(opponent) or {}).get("talent"))
-    if opp_talent is None and opp_is_fbs == 0 and gt_talent is not None:
-        opp_talent = NONFBS_TALENT_FLOOR
-    talent_diff = (gt_talent - opp_talent) if gt_talent is not None and opp_talent is not None else None
+    def _source(live_team: Any, live_opp: Any, resolved: float | None) -> str:
+        if resolved is None:
+            return "missing"
+        if live_team is not None and (live_opp is not None or opp_is_fbs == 0):
+            # An opponent-side floor substitution (non-FBS opponent, no live value) is a
+            # defined convention, not an uncertain estimate -- don't count it as "carryover".
+            return "live"
+        return "carryover"
+
+    talent_diff = _resolve_talent_diff(
+        client, talent, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=True
+    )
+    talent_source = _source(
+        (talent.get(team) or {}).get("talent"), (talent.get(opponent) or {}).get("talent"), talent_diff
+    )
 
     def _returning_total(v: dict[str, Any]) -> float | None:
         for key in ("totalPPA", "total", "totalPpa", "total_ppa", "total_returning"):
@@ -92,23 +120,40 @@ def _fetch_matchup_features(
 
     gt_ret = _returning_total(returning.get(team) or {})
     opp_ret = _returning_total(returning.get(opponent) or {})
+    # No carryover for returning production -- see the note above _preseason_talent_estimate()
+    # in features.py for why (prior-year value doesn't predict this-year value, R^2=0.026).
     returning_diff = (gt_ret - opp_ret) if gt_ret is not None and opp_ret is not None else None
+    returning_source = "live" if returning_diff is not None else "missing"
 
-    gt_rec_points = _as_float((recruiting.get(team) or {}).get("points"))
-    opp_rec_points = _as_float((recruiting.get(opponent) or {}).get("points"))
-    if opp_rec_points is None and opp_is_fbs == 0 and gt_rec_points is not None:
-        opp_rec_points = NONFBS_RECRUIT_POINTS_FLOOR
-    recruit_points_diff = (
-        gt_rec_points - opp_rec_points if gt_rec_points is not None and opp_rec_points is not None else None
+    recruit_points_diff = _resolve_recruit_points_diff(
+        client, recruiting, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=True
+    )
+    recruit_points_source = _source(
+        (recruiting.get(team) or {}).get("points"), (recruiting.get(opponent) or {}).get("points"), recruit_points_diff
     )
 
-    gt_rec_rank = _as_float((recruiting.get(team) or {}).get("rank"))
-    opp_rec_rank = _as_float((recruiting.get(opponent) or {}).get("rank"))
-    if opp_rec_rank is None and opp_is_fbs == 0 and gt_rec_rank is not None:
-        opp_rec_rank = NONFBS_RECRUIT_RANK_FLOOR
-    recruit_rank_diff = opp_rec_rank - gt_rec_rank if gt_rec_rank is not None and opp_rec_rank is not None else None
+    recruit_rank_diff = _resolve_recruit_rank_diff(
+        client, recruiting, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=True
+    )
+    recruit_rank_source = _source(
+        (recruiting.get(team) or {}).get("rank"), (recruiting.get(opponent) or {}).get("rank"), recruit_rank_diff
+    )
 
-    return pd.DataFrame(
+    sources = {
+        "elo_diff": elo_source,
+        "talent_diff": talent_source,
+        "returning_diff": returning_source,
+        "recruit_points_diff": recruit_points_source,
+        "recruit_rank_diff": recruit_rank_source,
+    }
+    n_live = sum(1 for f in ROSTER_STRENGTH_FEATURES if sources[f] == "live")
+    meta = {
+        "feature_completeness": n_live / len(ROSTER_STRENGTH_FEATURES),
+        "carryover_features": ",".join(f for f in ROSTER_STRENGTH_FEATURES if sources[f] == "carryover"),
+        "missing_features": ",".join(f for f in ROSTER_STRENGTH_FEATURES if sources[f] == "missing"),
+    }
+
+    X = pd.DataFrame(
         [
             {
                 "is_home": is_home,
@@ -134,6 +179,7 @@ def _fetch_matchup_features(
             }
         ]
     )
+    return X, meta
 
 
 def _load_model_bundle(model_path: Path) -> tuple[Any, Any | None, list[str] | None]:
@@ -245,7 +291,7 @@ def predict_schedule(
             opponent = home_team
             home_flag = "neutral" if neutral else "away"
 
-        X_full = _fetch_matchup_features(team=team, year=year, week=week, opponent=opponent, home=home_flag)
+        X_full, feature_meta = _fetch_matchup_features(team=team, year=year, week=week, opponent=opponent, home=home_flag)
         X = X_full.reindex(columns=feature_cols) if feature_cols else X_full
         p_win, extra = _predict_pwin(model_path=model_path, pipe=pipe, calibrator=calibrator, X=X)
 
@@ -260,6 +306,7 @@ def predict_schedule(
                 "neutral_site": int(neutral),
                 "p_win": p_win,
                 **extra,
+                **feature_meta,
             }
         )
 

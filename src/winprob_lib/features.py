@@ -308,6 +308,137 @@ def _preseason_elo_estimate(client: CFBDClient, *, team: str, year: int, use_cac
     return ELO_CARRYOVER_INTERCEPT + ELO_CARRYOVER_SLOPE * final_prior
 
 
+# Mean-reversion carryover for /talent and /recruiting/teams, same idea as the Elo carryover
+# above: fit by linear regression of "team's value in year Y" on "team's value in year Y-1"
+# across matched team-season pairs, 2015-2025, from this project's own cached CFBD data.
+# Unlike Elo, these are season-level constants already (no "final game of the season" lookup
+# needed) - CFBD just hasn't published year Y's value yet when this fallback triggers.
+#
+# talent composite: n=1902, R^2=0.974 - roster talent is highly sticky year over year (mostly
+# the same players), so this is a strong estimator.
+# recruiting points: n=2140, R^2=0.891 - a program's recruiting output also persists
+# reasonably well (coaching staff, brand, facilities don't reset each cycle).
+# recruiting rank: n=2140, R^2=0.841 - same idea, slightly noisier since rank is a zero-sum
+# ordering across ~130 teams rather than an absolute score.
+#
+# Returning production explicitly does NOT get a carryover: fit the identical way, prior-year
+# returning production predicts this-year returning production with R^2=0.026 (essentially
+# uncorrelated) - it's a function of who left after last season, which has no reason to track
+# who left the season before that. A carryover here would just be confident-looking noise, so
+# it's left missing (median-imputed by the trained pipeline) until CFBD publishes the real
+# number for that team-year.
+TALENT_CARRYOVER_SLOPE = 0.9922
+TALENT_CARRYOVER_INTERCEPT = 15.175
+RECRUIT_POINTS_CARRYOVER_SLOPE = 0.9501
+RECRUIT_POINTS_CARRYOVER_INTERCEPT = 7.7847
+RECRUIT_RANK_CARRYOVER_SLOPE = 0.9139
+RECRUIT_RANK_CARRYOVER_INTERCEPT = 8.8624
+
+
+def _preseason_talent_estimate(client: CFBDClient, *, team: str, year: int, use_cache: bool = True) -> float | None:
+    try:
+        prior_items = client.get("/talent", {"year": year - 1}, use_cache=use_cache)
+    except Exception:
+        return None
+    prior = _as_float((_index_by_team(prior_items, team_field="team").get(team) or {}).get("talent"))
+    if prior is None:
+        return None
+    return TALENT_CARRYOVER_INTERCEPT + TALENT_CARRYOVER_SLOPE * prior
+
+
+def _preseason_recruit_points_estimate(client: CFBDClient, *, team: str, year: int, use_cache: bool = True) -> float | None:
+    try:
+        prior_items = client.get("/recruiting/teams", {"year": year - 1}, use_cache=use_cache)
+    except Exception:
+        return None
+    prior = _as_float((_index_by_team(prior_items, team_field="team").get(team) or {}).get("points"))
+    if prior is None:
+        return None
+    return RECRUIT_POINTS_CARRYOVER_INTERCEPT + RECRUIT_POINTS_CARRYOVER_SLOPE * prior
+
+
+def _preseason_recruit_rank_estimate(client: CFBDClient, *, team: str, year: int, use_cache: bool = True) -> float | None:
+    try:
+        prior_items = client.get("/recruiting/teams", {"year": year - 1}, use_cache=use_cache)
+    except Exception:
+        return None
+    prior = _as_float((_index_by_team(prior_items, team_field="team").get(team) or {}).get("rank"))
+    if prior is None:
+        return None
+    return RECRUIT_RANK_CARRYOVER_INTERCEPT + RECRUIT_RANK_CARRYOVER_SLOPE * prior
+
+
+def _resolve_talent_diff(
+    client: CFBDClient,
+    talent_by_team: dict[str, dict[str, Any]],
+    *,
+    team: str,
+    opponent: str,
+    opp_is_fbs: int,
+    year: int,
+    use_cache: bool = True,
+) -> float | None:
+    gt_talent = _as_float((talent_by_team.get(team) or {}).get("talent"))
+    if gt_talent is None:
+        gt_talent = _preseason_talent_estimate(client, team=team, year=year, use_cache=use_cache)
+    opp_talent = _as_float((talent_by_team.get(opponent) or {}).get("talent"))
+    if opp_talent is None and opp_is_fbs == 0 and gt_talent is not None:
+        opp_talent = NONFBS_TALENT_FLOOR
+    elif opp_talent is None:
+        opp_talent = _preseason_talent_estimate(client, team=opponent, year=year, use_cache=use_cache)
+    if gt_talent is None or opp_talent is None:
+        return None
+    return gt_talent - opp_talent
+
+
+def _resolve_recruit_points_diff(
+    client: CFBDClient,
+    recruiting_by_team: dict[str, dict[str, Any]],
+    *,
+    team: str,
+    opponent: str,
+    opp_is_fbs: int,
+    year: int,
+    use_cache: bool = True,
+) -> float | None:
+    gt_points = _as_float((recruiting_by_team.get(team) or {}).get("points"))
+    if gt_points is None:
+        gt_points = _preseason_recruit_points_estimate(client, team=team, year=year, use_cache=use_cache)
+    opp_points = _as_float((recruiting_by_team.get(opponent) or {}).get("points"))
+    if opp_points is None and opp_is_fbs == 0 and gt_points is not None:
+        opp_points = NONFBS_RECRUIT_POINTS_FLOOR
+    elif opp_points is None:
+        opp_points = _preseason_recruit_points_estimate(client, team=opponent, year=year, use_cache=use_cache)
+    if gt_points is None or opp_points is None:
+        return None
+    return gt_points - opp_points
+
+
+def _resolve_recruit_rank_diff(
+    client: CFBDClient,
+    recruiting_by_team: dict[str, dict[str, Any]],
+    *,
+    team: str,
+    opponent: str,
+    opp_is_fbs: int,
+    year: int,
+    use_cache: bool = True,
+) -> float | None:
+    # Lower rank is better, so (opp - gt) makes positive => team better (matches build_dataset's
+    # existing sign convention for recruit_rank_diff).
+    gt_rank = _as_float((recruiting_by_team.get(team) or {}).get("rank"))
+    if gt_rank is None:
+        gt_rank = _preseason_recruit_rank_estimate(client, team=team, year=year, use_cache=use_cache)
+    opp_rank = _as_float((recruiting_by_team.get(opponent) or {}).get("rank"))
+    if opp_rank is None and opp_is_fbs == 0 and gt_rank is not None:
+        opp_rank = NONFBS_RECRUIT_RANK_FLOOR
+    elif opp_rank is None:
+        opp_rank = _preseason_recruit_rank_estimate(client, team=opponent, year=year, use_cache=use_cache)
+    if gt_rank is None or opp_rank is None:
+        return None
+    return opp_rank - gt_rank
+
+
 def build_dataset(
     *,
     year_from: int,
@@ -489,13 +620,13 @@ def build_dataset(
                 elif opp_is_fbs == 0 and gt_elo_carry is not None:
                     elo_diff = float(gt_elo_carry - FCS_ELO_FLOOR)
 
-            gt_talent = _as_float((talent_by_team.get(team) or {}).get("talent"))
-            opp_talent = _as_float((talent_by_team.get(opponent) or {}).get("talent"))
-            if opp_talent is None and opp_is_fbs == 0 and gt_talent is not None:
-                opp_talent = NONFBS_TALENT_FLOOR
-            talent_diff = (gt_talent - opp_talent) if gt_talent is not None and opp_talent is not None else None
+            talent_diff = _resolve_talent_diff(
+                client, talent_by_team, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=use_cache
+            )
 
             # Returning production fields vary by era/plan; prefer a robust "total" if present.
+            # No carryover fallback here -- prior-year returning production doesn't predict
+            # this-year returning production (see note above _preseason_talent_estimate).
             def _returning_total(v: dict[str, Any]) -> float | None:
                 for key in ("totalPPA", "total", "totalPpa", "total_ppa", "total_returning"):
                     out = _as_float(v.get(key))
@@ -508,23 +639,11 @@ def build_dataset(
             opp_ret = _returning_total(returning_by_team.get(opponent) or {})
             returning_diff = (gt_ret - opp_ret) if gt_ret is not None and opp_ret is not None else None
 
-            gt_rec_points = _as_float((recruiting_by_team.get(team) or {}).get("points"))
-            opp_rec_points = _as_float((recruiting_by_team.get(opponent) or {}).get("points"))
-            if opp_rec_points is None and opp_is_fbs == 0 and gt_rec_points is not None:
-                opp_rec_points = NONFBS_RECRUIT_POINTS_FLOOR
-            recruit_points_diff = (
-                gt_rec_points - opp_rec_points
-                if gt_rec_points is not None and opp_rec_points is not None
-                else None
+            recruit_points_diff = _resolve_recruit_points_diff(
+                client, recruiting_by_team, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=use_cache
             )
-
-            gt_rec_rank = _as_float((recruiting_by_team.get(team) or {}).get("rank"))
-            opp_rec_rank = _as_float((recruiting_by_team.get(opponent) or {}).get("rank"))
-            if opp_rec_rank is None and opp_is_fbs == 0 and gt_rec_rank is not None:
-                opp_rec_rank = NONFBS_RECRUIT_RANK_FLOOR
-            # Lower rank is better, so (opp - gt) makes positive => GT better.
-            recruit_rank_diff = (
-                opp_rec_rank - gt_rec_rank if gt_rec_rank is not None and opp_rec_rank is not None else None
+            recruit_rank_diff = _resolve_recruit_rank_diff(
+                client, recruiting_by_team, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=use_cache
             )
 
             rows.append(
@@ -764,30 +883,19 @@ def build_dataset_all_fbs(
                     elif opp_is_fbs == 0 and team_elo_carry is not None:
                         elo_diff = float(team_elo_carry - FCS_ELO_FLOOR)
 
-                gt_talent = _as_float((talent_by_team.get(team) or {}).get("talent"))
-                opp_talent = _as_float((talent_by_team.get(opponent) or {}).get("talent"))
-                if opp_talent is None and opp_is_fbs == 0 and gt_talent is not None:
-                    opp_talent = NONFBS_TALENT_FLOOR
-                talent_diff = (gt_talent - opp_talent) if gt_talent is not None and opp_talent is not None else None
+                talent_diff = _resolve_talent_diff(
+                    client, talent_by_team, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=use_cache
+                )
 
                 gt_ret = _returning_total(returning_by_team.get(team) or {})
                 opp_ret = _returning_total(returning_by_team.get(opponent) or {})
                 returning_diff = (gt_ret - opp_ret) if gt_ret is not None and opp_ret is not None else None
 
-                gt_rec_points = _as_float((recruiting_by_team.get(team) or {}).get("points"))
-                opp_rec_points = _as_float((recruiting_by_team.get(opponent) or {}).get("points"))
-                if opp_rec_points is None and opp_is_fbs == 0 and gt_rec_points is not None:
-                    opp_rec_points = NONFBS_RECRUIT_POINTS_FLOOR
-                recruit_points_diff = (
-                    gt_rec_points - opp_rec_points if gt_rec_points is not None and opp_rec_points is not None else None
+                recruit_points_diff = _resolve_recruit_points_diff(
+                    client, recruiting_by_team, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=use_cache
                 )
-
-                gt_rec_rank = _as_float((recruiting_by_team.get(team) or {}).get("rank"))
-                opp_rec_rank = _as_float((recruiting_by_team.get(opponent) or {}).get("rank"))
-                if opp_rec_rank is None and opp_is_fbs == 0 and gt_rec_rank is not None:
-                    opp_rec_rank = NONFBS_RECRUIT_RANK_FLOOR
-                recruit_rank_diff = (
-                    opp_rec_rank - gt_rec_rank if gt_rec_rank is not None and opp_rec_rank is not None else None
+                recruit_rank_diff = _resolve_recruit_rank_diff(
+                    client, recruiting_by_team, team=team, opponent=opponent, opp_is_fbs=opp_is_fbs, year=year, use_cache=use_cache
                 )
 
                 team_pts, opp_pts = _team_game_points(team, game)
